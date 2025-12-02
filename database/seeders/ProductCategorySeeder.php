@@ -12,29 +12,29 @@ class ProductCategorySeeder extends Seeder
     {
         $categories = [
             [
-                'name' => 'Elektronik',
-                'tagline' => 'Produk elektronik modern',
-                'description' => 'Kategori Elektronik menyediakan laptop, smartphone, kamera, dan perangkat teknologi lainnya untuk kebutuhan sehari-hari.'
+                'name' => 'Kemeja Pria',
+                'tagline' => 'kemeja pria vintage',
+                'description' => 'kemeja pria kasual berkuatitas tinggi, mulai dari yang formal hingga kasual.'
             ],
             [
-                'name' => 'Pakaian',
-                'tagline' => 'Gaya fashion terbaru',
-                'description' => 'Kategori Pakaian berisi outfit untuk pria dan wanita dengan berbagai pilihan model untuk setiap gaya.'
+                'name' => 'Dress',
+                'tagline' => 'Dress wanita cantik beragam',
+                'description' => 'Dress wanita berkualitas tinggi. ukuran beragam dan bermacam macam.'
             ],
             [
-                'name' => 'Aksesoris',
-                'tagline' => 'Aksesoris kekinian',
-                'description' => 'Kategori Aksesoris menghadirkan berbagai aksesori seperti jam tangan, topi, dan perhiasan untuk melengkapi penampilan kamu.'
+                'name' => 'Sneakers Pria',
+                'tagline' => 'Sneakers Vintage Pria',
+                'description' => 'Sneaker branded murah dengan kondisi bagus dan terbaik.'
             ],
             [
-                'name' => 'Kecantikan',
-                'tagline' => 'Perawatan terbaik bagi kulitmu',
-                'description' => 'Kategori Kecantikan menyediakan skincare, makeup, dan produk perawatan lain untuk menjaga kesehatan dan pesonamu.'
+                'name' => 'Handbag Wanita',
+                'tagline' => 'Handbag preloved berkualitas',
+                'description' => 'Handbag wanita Second dengan berbagai model dan kondisi terawat.'
             ],
             [
-                'name' => 'Peralatan Rumah',
-                'tagline' => 'Perlengkapan rumah tangga',
-                'description' => 'Kategori Peralatan Rumah berisi berbagai alat rumah tangga yang mempermudah aktivitas sehari-hari di rumah.'
+                'name' => 'Tas Pria',
+                'tagline' => 'Tas Pria vintage dengan berbagai macam warna.',
+                'description' => 'Tas branded berkualitas tinggi dengan berbagai macam pilihan.'
             ],
         ];
 
