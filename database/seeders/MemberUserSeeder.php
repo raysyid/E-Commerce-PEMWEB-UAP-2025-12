@@ -21,10 +21,10 @@ class MemberUserSeeder extends Seeder
 
         // Member 2
         User::create([
-            'name' => 'Member Dua',
-            'email' => 'member2@example.com',
+            'name' => 'agus',
+            'email' => 'agus@gmail.com',
             'phone_number' => '084444444444',
-            'password' => Hash::make('member456'),
+            'password' => Hash::make('agus'),
             'role' => 'member'
         ]);
     }

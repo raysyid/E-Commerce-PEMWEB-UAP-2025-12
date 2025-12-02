@@ -10,10 +10,10 @@ class StoreSeeder extends Seeder
     public function run(): void
     {
         Store::create([
-            'user_id' => 3,
+            'user_id' => 2,
             'name' => 'kittylona',
             'logo' => 'default.png',
-            'about' => 'crop top, cute dress, skirts, etc.',
+            'about' => 'Thrift curated | Coquette, Y2K, Morikei, Gothic, Grunge, Fairy & Kawaii',
             'phone' => '08123456789',
             'address_id' => 'ADDR01',
             'city' => 'Makassar',
