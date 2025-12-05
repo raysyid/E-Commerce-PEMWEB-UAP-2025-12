@@ -6,6 +6,9 @@
     <label>Nama Toko</label>
     <input type="text" name="name" required><br>
 
+    <label>Tentang Toko</label>
+    <textarea name="about"></textarea><br>
+
     <label>Nomor Telepon</label>
     <input type="text" name="phone" required><br>
 
@@ -15,11 +18,8 @@
     <label>Alamat Lengkap</label>
     <textarea name="address" required></textarea><br>
 
-    <label>Postal Code</label>
+    <label>Kode Pos</label>
     <input type="text" name="postal_code"><br>
-
-    <label>Tentang Toko (opsional)</label>
-    <textarea name="about"></textarea><br>
 
     <button type="submit">Daftarkan Toko</button>
 </form>
