@@ -4,6 +4,12 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CheckoutController;
+
+Route::middleware('auth')->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+});
 
 // Homepage tampil produk
 Route::get('/', [ProductController::class, 'index'])->name('home');
@@ -54,7 +60,6 @@ Route::middleware('auth')->group(function () {
 });
 
 // Detail produk
-Route::get('/product/{slug}', [ProductController::class, 'show'])
-    ->name('product.detail');
+Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.detail');
 
 require __DIR__ . '/auth.php';
