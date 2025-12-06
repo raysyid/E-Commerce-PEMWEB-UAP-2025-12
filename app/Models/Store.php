@@ -7,16 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 class Store extends Model
 {
     protected $fillable = [
-        'user_id',
-        'name',
-        'logo',
-        'about',
-        'phone',
-        'city',
-        'address',
-        'postal_code',
-        'is_verified'
-    ];
+    'user_id',
+    'name',
+    'logo',
+    'about',
+    'phone',
+    'city',
+    'address',
+    'postal_code',
+    'address_id',   // ⬅️ WAJIB
+    'is_verified',
+];
+
 
     public function user()
     {

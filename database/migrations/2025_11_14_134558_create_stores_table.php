@@ -16,12 +16,12 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('logo');
-            $table->text('about');
+            $table->text('about')->nullable();
             $table->string('phone');
             $table->string('address_id');
             $table->string('city');
             $table->text('address');
-            $table->string('postal_code');
+            $table->string('postal_code')->nullable();
             $table->boolean('is_verified')->default(false);
             $table->timestamps();
         });
