@@ -7,21 +7,42 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\LandingController;
 
+/*
+|--------------------------------------------------------------------------
+| GUEST (bisa akses tanpa login)
+|--------------------------------------------------------------------------
+*/
+
+// Homepage menampilkan produk
+Route::get('/', [LandingController::class, 'index'])->name('home');
+
+// Detail produk
+Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.detail');
+
+// Checkout harus login
 Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
 });
 
-// Homepage tampil produk
-Route::get('/', [LandingController::class, 'index'])->name('landing');
-// Dashboard setelah login
+
+/*
+|--------------------------------------------------------------------------
+| DASHBOARD (Hanya user login)
+|--------------------------------------------------------------------------
+*/
 Route::get('/dashboard', function () {
     return view('dashboard');
 })
 ->middleware(['auth', 'verified'])
 ->name('dashboard');
 
-// Register Store untuk member (belum punya toko)
+
+/*
+|--------------------------------------------------------------------------
+| MEMBER YANG BELUM PUNYA TOKO
+|--------------------------------------------------------------------------
+*/
 Route::middleware(['auth', 'isMember'])->group(function () {
 
     Route::get('/store/register', [StoreController::class, 'create'])
@@ -31,35 +52,45 @@ Route::middleware(['auth', 'isMember'])->group(function () {
         ->name('store.store');
 });
 
-// Seller route (sudah punya toko)
-Route::middleware(['auth', 'isSeller'])->group(function () {
 
+/*
+|--------------------------------------------------------------------------
+| SELLER (sudah punya toko)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'isSeller'])->group(function () {
     Route::get('/seller/dashboard', function () {
-        return 'Halo Seller, ini dashboard kamu.';
+        return view('seller.dashboard'); // nanti dibuat
     })->name('seller.dashboard');
 });
 
-// Admin Only
-Route::middleware(['auth', 'isAdmin'])->group(function () {
 
+/*
+|--------------------------------------------------------------------------
+| ADMIN ONLY
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/admin/dashboard', function () {
-        return 'Halo Admin, ini dashboard admin.';
+        return view('admin.dashboard'); // nanti dibuat
     })->name('admin.dashboard');
 });
 
-// Profile
+
+/*
+|--------------------------------------------------------------------------
+| PROFILE SETTINGS
+|--------------------------------------------------------------------------
+*/
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])
-        ->name('profile.edit');
-
-    Route::patch('/profile', [ProfileController::class, 'update'])
-        ->name('profile.update');
-
-    Route::delete('/profile', [ProfileController::class, 'destroy'])
-        ->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Detail produk
-Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.detail');
-
+/*
+|--------------------------------------------------------------------------
+| AUTH ROUTES
+|--------------------------------------------------------------------------
+*/
 require __DIR__ . '/auth.php';
