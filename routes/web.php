@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\LandingController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
@@ -12,8 +13,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Homepage tampil produk
-Route::get('/', [ProductController::class, 'index'])->name('home');
-
+Route::get('/', [LandingController::class, 'index'])->name('landing');
 // Dashboard setelah login
 Route::get('/dashboard', function () {
     return view('dashboard');
