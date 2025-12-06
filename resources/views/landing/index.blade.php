@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>Thriftsy</title>
@@ -21,14 +22,14 @@
         {{-- Auth --}}
         <div>
             @guest
-                <a href="{{ route('login') }}" class="mr-4 font-semibold">Login</a>
-                <a href="{{ route('register') }}" class="bg-black text-white px-4 py-2 rounded-lg">
-                    Daftar
-                </a>
+            <a href="{{ route('login') }}" class="mr-4 font-semibold">Login</a>
+            <a href="{{ route('register') }}" class="mr-4 font-semibold">
+                Daftar
+            </a>
             @endguest
 
             @auth
-                <a href="/dashboard" class="font-semibold">{{ auth()->user()->name }}</a>
+            <a href="/dashboard" class="font-semibold">{{ auth()->user()->name }}</a>
             @endauth
         </div>
     </nav>
@@ -47,34 +48,51 @@
             </h2>
 
             @guest
-                <a href="{{ route('login') }}" class="mt-6 inline-block bg-white text-black px-5 py-2 rounded-lg">
-                    Berjualan Sekarang
-                </a>
+            <a href="{{ route('login') }}" class="mt-6 inline-block bg-white text-black px-5 py-2 rounded-lg">
+                Berjualan Sekarang
+            </a>
             @else
-                <a href="/store/register" class="mt-6 inline-block bg-white text-black px-5 py-2 rounded-lg">
-                    Berjualan Sekarang
-                </a>
+            <a href="/store/register" class="mt-6 inline-block bg-white text-black px-5 py-2 rounded-lg">
+                Berjualan Sekarang
+            </a>
             @endguest
         </div>
     </section>
 
     {{-- Trending Items --}}
     <section class="px-10 my-8">
-        <h3 class="text-xl font-bold mb-4">Trending Item</h3>
+        <h3 class="text-xl font-bold mb-4">TRENDING ITEM</h3>
 
-        <div class="grid grid-cols-3 gap-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             @foreach($products as $product)
-                <a href="{{ route('product.detail', $product->slug) }}" class="border rounded-xl overflow-hidden shadow-sm">
-                    <img src="{{ $product->productImages->first()->image ?? 'https://via.placeholder.com/300' }}"
-                         class="w-full h-72 object-cover">
-                    <div class="p-3">
-                        <h4 class="font-semibold">{{ $product->name }}</h4>
-                        <p class="text-gray-600">Rp {{ number_format($product->price) }}</p>
-                    </div>
-                </a>
+
+            @php
+            $image = $product->productImages->where('is_thumbnail', 1)->first()
+            ?? $product->productImages->first()
+            ?? null;
+            @endphp
+
+            <a href="{{ route('product.detail', $product->slug) }}" class="group">
+
+                {{-- FOTO ONLY --}}
+                <div class="aspect-square w-full overflow-hidden rounded-xl bg-gray-100">
+                    <img
+                        src="{{ $image ? asset('storage/products/' . $image->image) : 'https://via.placeholder.com/300' }}"
+                        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                </div>
+
+                {{-- NAMA & HARGA --}}
+                <div class="mt-2">
+                    <h4 class="font-semibold text-sm line-clamp-1">{{ $product->name }}</h4>
+                    <p class="text-gray-700 text-sm">
+                        Rp {{ number_format($product->price, 0, ',', '.') }}
+                    </p>
+                </div>
+
+            </a>
+
             @endforeach
         </div>
     </section>
-
 </body>
 </html>
