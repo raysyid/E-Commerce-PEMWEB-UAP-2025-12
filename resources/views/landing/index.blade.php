@@ -2,97 +2,185 @@
 <html lang="id">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Thriftsy</title>
-    @vite('resources/css/app.css')
+  <meta charset="UTF-8">
+  <title>Thriftsy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  @vite('resources/css/app.css')
 </head>
 
 <body class="bg-white text-gray-800">
 
-    {{-- Navbar --}}
-    <nav class="flex justify-between items-center px-10 py-6">
-        <h1 class="text-2xl font-bold tracking-wide">Thriftsy</h1>
+  {{-- NAVBAR --}}
+  <nav class="w-full flex items-center justify-between px-10 py-6 border-b bg-white">
+    <a href="/" class="text-2xl font-bold tracking-wide">Thriftsy</a>
 
-        {{-- Search --}}
-        <div class="w-1/3">
-            <input type="text" placeholder="Cari pakaian vintage..."
-                class="w-full border rounded-full px-4 py-2 outline-none shadow-sm">
-        </div>
-
-        {{-- Auth --}}
-        <div>
-            @guest
-            <a href="{{ route('login') }}" class="mr-4 font-semibold">Login</a>
-            <a href="{{ route('register') }}" class="mr-4 font-semibold">
-                Daftar
-            </a>
-            @endguest
-
-            @auth
-            <a href="/dashboard" class="font-semibold">{{ auth()->user()->name }}</a>
-            @endauth
-        </div>
-    </nav>
-
-    {{-- Gender Filter --}}
-    <div class="flex gap-6 px-10 text-lg font-medium">
-        <a href="#" class="hover:text-black text-gray-600">Pria</a>
-        <a href="#" class="hover:text-black text-gray-600">Wanita</a>
+    {{-- Search --}}
+    <div class="hidden md:flex w-1/3">
+      <input type="text" placeholder="Cari pakaian vintage..."
+        class="w-full border rounded-lg px-4 py-2 outline-none shadow-sm text-sm">
     </div>
 
-    {{-- Hero Banner --}}
-    <section class="px-10 my-10">
-        <div class="bg-gray-800 text-white rounded-xl p-10">
-            <h2 class="text-4xl font-extrabold leading-snug w-2/3">
-                THRIFT JUAL-BELI BAJU VINTAGE DENGAN BAHAN BERKUALITAS
-            </h2>
+    {{-- Auth --}}
+    <div class="text-sm font-semibold">
+      @guest
+      <a href="{{ route('login') }}" class="mr-4 hover:underline">Login</a>
+      <a href="{{ route('register') }}" class="hover:underline">Daftar</a>
+      @endguest
 
-            @guest
-            <a href="{{ route('login') }}" class="mt-6 inline-block bg-white text-black px-5 py-2 rounded-lg">
-                Berjualan Sekarang
-            </a>
-            @else
-            <a href="/store/register" class="mt-6 inline-block bg-white text-black px-5 py-2 rounded-lg">
-                Berjualan Sekarang
-            </a>
-            @endguest
+      @auth
+      <a href="/dashboard" class="hover:underline">{{ auth()->user()->name }}</a>
+      @endauth
+    </div>
+  </nav>
+
+  {{-- KATEGORI --}}
+  <div class="px-10 py-3 text-sm text-gray-600 flex gap-6 font-medium">
+    <a href="#" class="hover:text-black">Pria</a>
+    <a href="#" class="hover:text-black">Wanita</a>
+  </div>
+
+  {{-- HERO SECTION (FULL WIDTH FEEL) --}}
+  <section class="px-10 mt-6">
+    <div class="w-full bg-gray-800 rounded-2xl p-12 text-white relative overflow-hidden">
+
+      <h2 class="text-3xl md:text-4xl font-bold leading-snug w-full md:w-2/3">
+        THRIFT JUAL-BELI BAJU VINTAGE<br />
+        DENGAN BAHAN BERKUALITAS
+      </h2>
+
+      @guest
+      <a href="{{ route('login') }}"
+        class="mt-6 inline-block bg-white text-black px-6 py-3 rounded-lg font-semibold">
+        Berjualan Sekarang
+      </a>
+      @else
+      <a href="/store/register"
+        class="mt-6 inline-block bg-white text-black px-6 py-3 rounded-lg font-semibold">
+        Berjualan Sekarang
+      </a>
+      @endguest
+
+    </div>
+  </section>
+
+  {{-- TRENDING ITEM --}}
+  <section class="px-10 my-10">
+    <h3 class="text-xl font-bold mb-4">TRENDING ITEM</h3>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      @foreach ($products as $product)
+
+      @php
+      $image = $product->productImages->where('is_thumbnail', 1)->first()
+      ?? $product->productImages->first()
+      ?? null;
+      @endphp
+
+      <a href="{{ route('product.detail', $product->slug) }}" class="group">
+
+        {{-- Image --}}
+        <div class="aspect-square w-full overflow-hidden rounded-xl bg-gray-100">
+          <img src="{{ $image ? asset('storage/products/' . $image->image) : 'https://via.placeholder.com/300' }}"
+            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
         </div>
-    </section>
 
-    {{-- Trending Items --}}
-    <section class="px-10 my-8">
-        <h3 class="text-xl font-bold mb-4">TRENDING ITEM</h3>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-            @foreach($products as $product)
-
-            @php
-            $image = $product->productImages->where('is_thumbnail', 1)->first()
-            ?? $product->productImages->first()
-            ?? null;
-            @endphp
-
-            <a href="{{ route('product.detail', $product->slug) }}" class="group">
-
-                {{-- FOTO ONLY --}}
-                <div class="aspect-square w-full overflow-hidden rounded-xl bg-gray-100">
-                    <img
-                        src="{{ $image ? asset('storage/products/' . $image->image) : 'https://via.placeholder.com/300' }}"
-                        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-                </div>
-
-                {{-- NAMA & HARGA --}}
-                <div class="mt-2">
-                    <h4 class="font-semibold text-sm line-clamp-1">{{ $product->name }}</h4>
-                    <p class="text-gray-700 text-sm">
-                        Rp {{ number_format($product->price, 0, ',', '.') }}
-                    </p>
-                </div>
-
-            </a>
-
-            @endforeach
+        {{-- Name + Price --}}
+        <div class="mt-2">
+          <h4 class="font-semibold text-sm line-clamp-1">{{ $product->name }}</h4>
+          <p class="text-gray-700 text-sm">
+            Rp {{ number_format($product->price, 0, ',', '.') }}
+          </p>
         </div>
-    </section>
+
+      </a>
+
+      @endforeach
+    </div>
+  </section>
+
+  {{-- REKOMENDASI TOKO --}}
+  <section class="px-10 my-14">
+    <h3 class="text-xl font-bold mb-6">Rekomendasi Toko</h3>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+
+      @foreach ($stores as $store)
+      <div class="border rounded-xl p-6 text-center shadow-sm hover:shadow-md transition">
+
+        {{-- Logo toko --}}
+        <div class="flex justify-center mb-4">
+          <img src="{{ asset('storage/store/' . $store->logo) }}"
+            onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed={{ $store->name }}';"
+            class="w-16 h-16 rounded-full object-cover">
+        </div>
+
+        {{-- Nama Toko --}}
+        <h4 class="font-semibold text-lg capitalize">{{ $store->name }}</h4>
+
+        {{-- Deskripsi --}}
+        <p class="text-sm text-gray-600 mt-2 leading-relaxed line-clamp-3">
+          {{ $store->about }}
+        </p>
+
+        {{-- Kota --}}
+        <p class="text-xs text-gray-500 mt-2">
+          📍 {{ $store->city }}
+        </p>
+
+      </div>
+      @endforeach
+
+    </div>
+  </section>
+
+
+  {{-- FOOTER --}}
+  <footer class="bg-[#f7f4ed] text-black py-12 px-6 md:px-20">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+      <!-- Column 1 -->
+      <div>
+        <h3 class="font-semibold text-lg mb-4">Thriftsy</h3>
+        <ul class="space-y-2 text-sm text-gray-700">
+          <li><a href="#" class="hover:text-black">Tentang Kami</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 2 -->
+      <div>
+        <h3 class="font-semibold text-lg mb-4">Discover</h3>
+        <ul class="space-y-2 text-sm text-gray-700">
+          <li><a href="#" class="hover:text-black">Cara Kerjanya</a></li>
+          <li><a href="#" class="hover:text-black">Mulai Jualan</a></li>
+          <li><a href="#" class="hover:text-black">Belanja</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3 -->
+      <div>
+        <h3 class="font-semibold text-lg mb-4">Help</h3>
+        <ul class="space-y-2 text-sm text-gray-700">
+          <li><a href="#" class="hover:text-black">Contact</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Social Icons -->
+    <div class="flex items-center gap-4 mt-14 mb-6">
+      <a href="#"><img src="icons/ig.svg" class="w-6"></a>
+      <a href="#"><img src="icons/tiktok.svg" class="w-6"></a>
+      <a href="#"><img src="icons/x.svg" class="w-6"></a>
+      <a href="#"><img src="icons/fb.svg" class="w-6"></a>
+      <a href="#"><img src="icons/linkedin.svg" class="w-6"></a>
+    </div>
+
+    <!-- Bottom Links -->
+    <div class="flex gap-10 text-sm text-gray-700">
+      <a href="#" class="hover:text-black">Privacy Policy</a>
+      <a href="#" class="hover:text-black">Terms & Conditions</a>
+    </div>
+  </footer>
+
 </body>
 </html>
