@@ -11,7 +11,7 @@ class StoreController extends Controller
 {
     public function create()
     {
-        return view('seller.store-register'); 
+        return view('seller.store-register');
     }
 
     public function store(Request $request)
