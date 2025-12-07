@@ -10,12 +10,15 @@ class EnsureIsMember
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->user()) {
+        $user = $request->user();
+
+        if (!$user) {
             return redirect()->route('login');
         }
 
-        if ($request->user()->role !== 'member') {
-            abort(403, 'Akses khusus member');
+        // Hanya member yang BELUM punya toko
+        if ($user->role !== 'member' || $user->store) {
+            return abort(403, 'Akses khusus member yang belum memiliki toko');
         }
 
         return $next($request);

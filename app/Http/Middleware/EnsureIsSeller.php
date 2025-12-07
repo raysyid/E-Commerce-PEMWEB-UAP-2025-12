@@ -5,20 +5,21 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Store;
 
 class EnsureIsSeller
 {
     public function handle(Request $request, Closure $next)
     {
-        $userId = Auth::id();
+        $user = Auth::user();
 
-        $store = Store::where('user_id', $userId)->first();
-
-        if ($userId && $store) {
-            return $next($request);
+        if (!$user) {
+            return redirect()->route('login');
         }
 
-        return abort(403, 'AKSES KHUSUS SELLER');
+        if ($user->role !== 'seller' || !$user->store) {
+            return abort(403, 'Akses khusus seller');
+        }
+
+        return $next($request);
     }
 }

@@ -17,44 +17,50 @@ use App\Http\Controllers\SellerCategoryController;
 
 /*
 |--------------------------------------------------------------------------
-| GUEST & LANDING (AUTO REDIRECT)
+| LANDING PAGE (lebih simpel)
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {
-
-    if (Auth::check()) {
-        if (Auth::user()->role === 'seller') {
-            return redirect()->route('seller.dashboard');
-        }
-        if (Auth::user()->role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        }
+    // Kalau seller → langsung ke dashboard seller
+    if (Auth::check() && Auth::user()->role === 'seller') {
+        return redirect()->route('seller.dashboard');
     }
 
+    // Kalau admin → ke dashboard admin
+    if (Auth::check() && Auth::user()->role === 'admin') {
+        return redirect()->route('admin.dashboard');
+    }
+
+    // Selain itu (guest / member) → lihat landing biasa
     return app(LandingController::class)->index();
 })->name('home');
 
-// detail produk
+/*
+|--------------------------------------------------------------------------
+| DETAIL PRODUK PUBLIC
+|--------------------------------------------------------------------------
+*/
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.detail');
 
-// checkout
+/*
+|--------------------------------------------------------------------------
+| CHECKOUT (harus login)
+|--------------------------------------------------------------------------
+*/
 Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
 });
 
-
 /*
 |--------------------------------------------------------------------------
-| DASHBOARD LOGIN
+| DASHBOARD DEFAULT (setelah login)
+| Biar login nggak ke halaman laravel default, kita arahkan ke home saja.
 |--------------------------------------------------------------------------
 */
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})
-->middleware(['auth', 'verified'])
-->name('dashboard');
-
+    return redirect()->route('home');
+})->middleware(['auth'])->name('dashboard');
 
 /*
 |--------------------------------------------------------------------------
@@ -65,7 +71,6 @@ Route::middleware(['auth', 'isMember'])->group(function () {
     Route::get('/store/register', [StoreController::class, 'create'])->name('store.register');
     Route::post('/store/register', [StoreController::class, 'store'])->name('store.store');
 });
-
 
 /*
 |--------------------------------------------------------------------------
@@ -82,8 +87,10 @@ Route::middleware(['auth', 'isSeller'])->prefix('seller')->group(function () {
     Route::post('/profile', [SellerProfileController::class, 'update'])
         ->name('seller.profile.update');
 
-    Route::resource('/products', SellerProductController::class);
-    Route::resource('/categories', SellerCategoryController::class)->except(['show']);
+    Route::resource('/categories', SellerCategoryController::class, ['as' => 'seller'])
+        ->except(['show']);
+
+    Route::resource('/products', SellerProductController::class, ['as' => 'seller']);
 
     Route::get('/orders', [SellerOrderController::class, 'index'])
         ->name('seller.orders');
@@ -93,10 +100,9 @@ Route::middleware(['auth', 'isSeller'])->prefix('seller')->group(function () {
     Route::get('/balance', [SellerBalanceController::class, 'index'])
         ->name('seller.balance');
 
-    Route::resource('/withdrawals', SellerWithdrawalController::class)
+    Route::resource('/withdrawals', SellerWithdrawalController::class, ['as' => 'seller'])
         ->only(['index', 'store']);
 });
-
 
 /*
 |--------------------------------------------------------------------------
@@ -109,10 +115,9 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     })->name('admin.dashboard');
 });
 
-
 /*
 |--------------------------------------------------------------------------
-| PROFILE
+| PROFILE SETTINGS
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
@@ -120,6 +125,5 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
 
 require __DIR__ . '/auth.php';

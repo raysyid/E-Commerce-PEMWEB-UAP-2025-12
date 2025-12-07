@@ -13,11 +13,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role', // pastikan ini ada
+        'role',
     ];
 
     public function store()
-{
-    return $this->hasOne(Store::class);
-}
+    {
+        return $this->hasOne(Store::class);
+    }
 }

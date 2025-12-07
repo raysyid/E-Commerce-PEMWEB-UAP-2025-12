@@ -21,15 +21,41 @@
     </div>
 
     {{-- Auth --}}
-    <div class="text-sm font-semibold">
+    <div class="relative text-sm font-semibold">
       @guest
-      <a href="{{ route('login') }}" class="mr-4 hover:underline">Login</a>
+      <a href="{{ route('login') }}" class="hover:underline">Login</a>
       <a href="{{ route('register') }}" class="hover:underline">Daftar</a>
-      @endguest
+      @else
 
-      @auth
-      <a href="/dashboard" class="hover:underline">{{ auth()->user()->name }}</a>
-      @endauth
+      <div class="group inline-block relative">
+
+        {{-- Trigger (nama user + ikon optional) --}}
+        <button class="flex items-center gap-1 text-gray-800">
+          {{ auth()->user()->name }}
+          <span class="text-xs">▼</span>
+        </button>
+
+        {{-- Dropdown --}}
+        <div
+          class="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg 
+                opacity-0 invisible group-hover:opacity-100 group-hover:visible 
+                transition-all duration-150 z-50">
+          <a href="{{ route('profile.edit') }}"
+            class="block px-4 py-2 hover:bg-gray-100 text-gray-700">
+            Profil
+          </a>
+
+          <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit"
+              class="w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100">
+              Logout
+            </button>
+          </form>
+        </div>
+      </div>
+
+      @endguest
     </div>
   </nav>
 
@@ -183,4 +209,5 @@
   </footer>
 
 </body>
+
 </html>
