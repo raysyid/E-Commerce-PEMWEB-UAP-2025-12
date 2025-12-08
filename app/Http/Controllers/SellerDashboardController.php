@@ -8,19 +8,19 @@ use Illuminate\Support\Facades\Auth;
 class SellerDashboardController extends Controller
 {
     public function index()
-    {
-        $userId = Auth::id();
+{
+    $store = auth()->user()->store;
 
-        $store = Store::where('user_id', $userId)->first();
-
-        if (!$store) {
-            return redirect()->route('store.register')
-                ->with('error', 'Kamu belum memiliki toko.');
-        }
-
-        $products = $store->products()->count() ?? 0;
-        $orders   = $store->transactions()->count() ?? 0;
-
-        return view('seller.dashboard', compact('store', 'products', 'orders'));
+    if (!$store) {
+        return redirect()->route('store.register')
+            ->with('error', 'Kamu belum memiliki toko.');
     }
+
+    return view('seller.dashboard', [
+        'store'    => $store,
+        'products' => $store->products()->count(),
+        'orders'   => $store->transactions()->where('payment_status', 'unpaid')->count(),
+    ]);
+}
+
 }

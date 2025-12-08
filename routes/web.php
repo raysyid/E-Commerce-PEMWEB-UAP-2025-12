@@ -21,7 +21,16 @@ use App\Http\Controllers\SellerCategoryController;
 | HOME / LANDING
 |--------------------------------------------------------------------------
 */
-Route::get('/', [LandingController::class, 'index'])->name('home');
+Route::get('/', function () {
+
+    if (Auth::check()) {
+        if (Auth::user()->role === 'seller') return redirect()->route('seller.dashboard');
+        if (Auth::user()->role === 'admin') return redirect()->route('admin.dashboard');
+    }
+
+    return app(LandingController::class)->index();
+})->name('home');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -30,17 +39,10 @@ Route::get('/', [LandingController::class, 'index'])->name('home');
 */
 Route::get('/dashboard', function () {
 
-    if (!Auth::check()) {
-        return redirect()->route('login');
-    }
+    if (!Auth::check()) return redirect()->route('login');
 
-    if (Auth::user()->role === 'seller') {
-        return redirect()->route('seller.dashboard');
-    }
-
-    if (Auth::user()->role === 'admin') {
-        return redirect()->route('admin.dashboard');
-    }
+    if (Auth::user()->role === 'seller') return redirect()->route('seller.dashboard');
+    if (Auth::user()->role === 'admin') return redirect()->route('admin.dashboard');
 
     return redirect()->route('home'); // member balik ke home
 })->name('dashboard');
@@ -48,7 +50,7 @@ Route::get('/dashboard', function () {
 
 /*
 |--------------------------------------------------------------------------
-| PRODUK & CHECKOUT
+| DETAIL PRODUK & CHECKOUT
 |--------------------------------------------------------------------------
 */
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.detail');
@@ -74,6 +76,15 @@ Route::middleware(['auth', 'isMember'])->group(function () {
 |--------------------------------------------------------------------------
 | SELLER AREA
 |--------------------------------------------------------------------------
+|
+| prefix = seller/
+| name = seller.
+|
+| Jadi otomatis:
+| /seller/dashboard → route('seller.dashboard')
+| /seller/profile   → route('seller.profile')
+| /seller/products  → route('seller.products.index')
+|--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'isSeller'])->prefix('seller')->name('seller.')->group(function () {
 
@@ -92,6 +103,7 @@ Route::middleware(['auth', 'isSeller'])->prefix('seller')->name('seller.')->grou
 
     Route::resource('/withdrawals', SellerWithdrawalController::class)->only(['index', 'store']);
 });
+
 
 
 /*
@@ -116,6 +128,5 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
 
 require __DIR__ . '/auth.php';

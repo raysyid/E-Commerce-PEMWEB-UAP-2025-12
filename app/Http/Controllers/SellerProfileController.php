@@ -10,7 +10,7 @@ class SellerProfileController extends Controller
 {
     public function index()
     {
-        $store = Auth::user()->store;
+        $store = Store::where('user_id', Auth::id())->first();
 
         if (!$store) {
             return redirect()->route('store.register')
@@ -22,14 +22,41 @@ class SellerProfileController extends Controller
 
     public function update(Request $request)
     {
-        $store = Auth::user()->store;
+        $store = Store::where('user_id', Auth::id())->first();
 
         if (!$store) {
-            return redirect()->route('store.register');
+            return redirect()->route('store.register')
+                ->with('error', 'Kamu belum punya toko.');
         }
 
-        $store->update($request->only(['name','about','phone','address','city','postal_code']));
+        $request->validate([
+            'name'   => 'required|string|max:255',
+            'about'  => 'nullable|string|max:500',
+            'phone'  => 'required|string|max:20',
+            'city'   => 'required|string|max:100',
+            'address'=> 'required|string',
+            'logo'   => 'nullable|image|max:2048',
+        ]);
 
-        return back()->with('success', 'Profil toko berhasil diperbarui.');
+        $store->update([
+            'name'    => $request->name,
+            'about'   => $request->about,
+            'phone'   => $request->phone,
+            'city'    => $request->city,
+            'address' => $request->address,
+        ]);
+
+        // Upload logo jika ada
+        if ($request->hasFile('logo')) {
+            $file = $request->file('logo');
+            $filename = time().'_'.$file->getClientOriginalName();
+            $file->storeAs('public/store_logo', $filename);
+
+            $store->update(['logo' => $filename]);
+        }
+
+        return redirect()
+            ->route('seller.dashboard')
+            ->with('success', 'Profil toko berhasil diperbarui!');
     }
 }

@@ -1,33 +1,76 @@
 <x-app-layout>
-    <h1 class="text-2xl font-bold">Profil Toko</h1>
+    <div class="max-w-5xl mx-auto py-10 px-6">
 
-    <form method="POST" enctype="multipart/form-data" action="{{ route('seller.profile.update') }}">
-        @csrf
+        <h1 class="text-3xl font-bold mb-6">Profil Toko</h1>
 
-        <div class="mt-4">
-            <label>Nama Toko</label>
-            <input type="text" name="name" value="{{ $store->name }}" class="border p-2 w-full">
+        {{-- Card Container --}}
+        <div class="bg-white border rounded-lg shadow-sm p-6">
+
+            <form method="POST" enctype="multipart/form-data" action="{{ route('seller.profile.update') }}">
+                @csrf
+
+                {{-- Nama Toko --}}
+                <div class="mb-5">
+                    <label class="block font-semibold text-gray-700 mb-1">Nama Toko</label>
+                    <input type="text" name="name"
+                        value="{{ $store->name }}"
+                        class="w-full border px-3 py-2 rounded focus:ring focus:ring-gray-200">
+                </div>
+
+                {{-- Tentang Toko --}}
+                <div class="mb-5">
+                    <label class="block font-semibold text-gray-700 mb-1">Tentang Toko</label>
+                    <textarea name="about"
+                        class="w-full border px-3 py-2 rounded focus:ring focus:ring-gray-200"
+                        rows="4">{{ $store->about }}</textarea>
+                </div>
+
+                {{-- Nomor WhatsApp --}}
+                <div class="mb-5">
+                    <label class="block font-semibold text-gray-700 mb-1">Nomor WhatsApp</label>
+                    <input type="text" name="phone"
+                        value="{{ $store->phone }}"
+                        class="w-full border px-3 py-2 rounded focus:ring focus:ring-gray-200">
+                </div>
+
+                {{-- Kota --}}
+                <div class="mb-5">
+                    <label class="block font-semibold text-gray-700 mb-1">Kota</label>
+                    <input type="text" name="city"
+                        value="{{ $store->city }}"
+                        class="w-full border px-3 py-2 rounded focus:ring focus:ring-gray-200">
+                </div>
+
+                {{-- Alamat --}}
+                <div class="mb-5">
+                    <label class="block font-semibold text-gray-700 mb-1">Alamat Lengkap</label>
+                    <textarea name="address"
+                        class="w-full border px-3 py-2 rounded focus:ring focus:ring-gray-200"
+                        rows="2">{{ $store->address }}</textarea>
+                </div>
+
+                {{-- Logo Toko --}}
+                <div class="mb-5">
+                    <label class="block font-semibold text-gray-700 mb-1">Logo Toko</label>
+                    <input type="file" name="logo"
+                        class="border w-full px-3 py-2 rounded cursor-pointer">
+
+                    @if($store->logo)
+                        <img src="{{ asset('storage/store_logo/'.$store->logo) }}"
+                             class="w-20 h-20 object-cover mt-3 rounded-full border">
+                    @endif
+                </div>
+
+                {{-- Tombol --}}
+                <div class="mt-6">
+                    <button type="submit"
+                        class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 transition">
+                        Simpan Perubahan
+                    </button>
+                </div>
+
+            </form>
+
         </div>
-
-        <div class="mt-4">
-            <label>Deskripsi</label>
-            <textarea name="about" class="border p-2 w-full">{{ $store->about }}</textarea>
-        </div>
-
-        <div class="mt-4">
-            <label>No WhatsApp</label>
-            <input type="text" name="phone" value="{{ $store->phone }}" class="border p-2 w-full">
-        </div>
-
-        <div class="mt-4">
-            <label>Logo Toko</label>
-            <input type="file" name="logo" class="border p-2 w-full">
-
-            @if($store->logo)
-                <img src="{{ asset('storage/store_logo/'.$store->logo) }}" class="w-24 mt-3 rounded">
-            @endif
-        </div>
-
-        <button class="mt-6 bg-black text-white px-4 py-2 rounded">Simpan</button>
-    </form>
+    </div>
 </x-app-layout>
