@@ -36,7 +36,7 @@ class CheckoutController extends Controller
         ]);
 
         $product = Product::findOrFail($request->product_id);
-        $shippingCost = $request->shipping_type === 'SiCepat' ? 20000 : 17000;
+        $shippingCost = $request->shipping_type === 'express' ? 20000 : 17000;
 
         $transaction = Transaction::create([
             'buyer_id' => Auth::id(),

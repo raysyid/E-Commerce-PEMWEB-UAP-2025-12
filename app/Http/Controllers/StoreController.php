@@ -33,12 +33,12 @@ class StoreController extends Controller
             'user_id'     => $userId,
             'name'        => strtolower($request->name),
             'logo'        => 'default.png',
-            'about'       => $request->about ?? '-',  // default jika kosong
+            'about'       => $request->about ?? '-',
             'phone'       => $request->phone,
             'city'        => $request->city,
             'address'     => $request->address,
             'postal_code' => $request->postal_code ?? '-',
-            'address_id'  => $addressCode,   // 💥 WAJIB (agar tidak error address_id)
+            'address_id'  => $addressCode,
             'is_verified' => false,
         ]);
 

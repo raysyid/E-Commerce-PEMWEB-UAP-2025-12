@@ -6,37 +6,37 @@
 
 
 
-    <!-- {{-- ================= LEFT : FORM ================= --}} -->
+    {{-- ================= LEFT : FORM ================= --}}
     <div>
         <h2 class="text-3xl font-bold mb-8">Isi Data Penerima</h2>
 
-        <form action="{{ route('checkout.process') }}" method="POST" class="space-y-6">
+        <form id="checkoutForm" action="{{ route('checkout.process') }}" method="POST" class="space-y-6">
             @csrf
 
             <input type="hidden" name="product_id" value="{{ $product->id }}">
 
-            <!-- {{-- Nama --}} -->
+            {{-- Nama --}}
             <div>
                 <label class="block text-sm font-medium mb-1">Nama Penerima</label>
                 <input type="text" name="receiver_name" value="{{ auth()->user()->name }}"
                     class="w-full border rounded-lg px-4 py-2 focus:ring focus:ring-black/20" required>
             </div>
 
-            <!-- {{-- Alamat --}} -->
+            {{-- Alamat --}}
             <div>
                 <label class="block text-sm font-medium mb-1">Alamat Lengkap</label>
                 <textarea name="address"
                     class="w-full border rounded-lg px-4 py-2 h-28 focus:ring focus:ring-black/20" required></textarea>
             </div>
 
-            <!-- {{-- Telp --}} -->
+            {{-- Telp --}}
             <div>
                 <label class="block text-sm font-medium mb-1">No Telp</label>
                 <input type="text" name="phone"
                     class="w-full border rounded-lg px-4 py-2 focus:ring focus:ring-black/20" required>
             </div>
 
-            <!-- {{-- Pengiriman --}} -->
+            {{-- Pengiriman --}}
             <div>
                 <label class="block text-sm font-medium mb-1">Metode Pengiriman</label>
                 <select name="shipping_type"
@@ -47,7 +47,7 @@
                 </select>
             </div>
 
-            <!-- {{-- Pembayaran --}} -->
+            {{-- Pembayaran --}}
             <div>
                 <label class="block text-sm font-medium mb-1">Metode Pembayaran</label>
                 <select name="payment_method"
@@ -60,10 +60,10 @@
         </form>
     </div>
 
-    <!-- {{-- ================= RIGHT : SELLER + ORDER ================= --}} -->
+    {{-- ================= RIGHT : SELLER + ORDER ================= --}}
     <div class="border rounded-xl p-6 shadow-sm">
 
-        <!-- {{-- Header --}} -->
+        {{-- Header --}}
         <div class="flex justify-between items-start mb-6">
             <h3 class="text-lg font-bold">Seller</h3>
 
@@ -73,7 +73,7 @@
             </div>
         </div>
 
-        <!-- {{-- Seller --}} -->
+        {{-- Seller --}}
         <div class="flex items-center gap-4 mb-6">
             <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center font-bold">
                 {{ strtoupper(substr($product->store->name,0,1)) }}
@@ -85,7 +85,7 @@
             </div>
         </div>
 
-        <!-- {{-- Order --}} -->
+        {{-- Order --}}
         <h3 class="font-bold mb-4">Order</h3>
 
         <div class="flex items-center gap-4 mb-4">
@@ -115,7 +115,7 @@
             </div>
         </div>
 
-        <!-- {{-- BUTTON BAYAR (KANAN BAWAH) --}} -->
+        {{-- BUTTON BAYAR (KANAN BAWAH) --}}
         <button form="checkoutForm"
             class="w-full mt-6 bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800">
             Bayar Sekarang

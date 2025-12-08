@@ -93,7 +93,7 @@ Route::middleware(['auth', 'isSeller'])->prefix('seller')->name('seller.')->grou
     Route::get('/profile', [SellerProfileController::class, 'index'])->name('profile');
     Route::post('/profile', [SellerProfileController::class, 'update'])->name('profile.update');
 
-    Route::resource('/categories', SellerCategoryController::class)->except(['show']);
+    Route::resource('categories', SellerCategoryController::class)->except(['show']);
     Route::resource('/products', SellerProductController::class);
 
     Route::get('/orders', [SellerOrderController::class, 'index'])->name('orders');
@@ -103,8 +103,6 @@ Route::middleware(['auth', 'isSeller'])->prefix('seller')->name('seller.')->grou
 
     Route::resource('/withdrawals', SellerWithdrawalController::class)->only(['index', 'store']);
 });
-
-
 
 /*
 |--------------------------------------------------------------------------

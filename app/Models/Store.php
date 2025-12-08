@@ -15,7 +15,7 @@ class Store extends Model
     'city',
     'address',
     'postal_code',
-    'address_id',   // ⬅️ WAJIB
+    'address_id',
     'is_verified',
 ];
 
