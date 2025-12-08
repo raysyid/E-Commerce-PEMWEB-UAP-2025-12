@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Store;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use Illuminate\Http\Request;
@@ -15,24 +16,34 @@ class CheckoutController extends Controller
     {
         $product = Product::findOrFail($request->product);
 
-        return view('checkout.index', compact('product'));
+        // Ambil data toko dari product
+        $store = Store::where('id', $product->store_id)->first();
+
+        // Ambil data user untuk pre-fill
+        $user = Auth::user();
+
+        return view('checkout.index', compact('product', 'store', 'user'));
     }
 
     public function process(Request $request)
     {
         $request->validate([
+            'receiver_name' => 'required',
+            'phone' => 'required',
             'address' => 'required',
             'shipping_type' => 'required',
             'payment_method' => 'required',
         ]);
 
         $product = Product::findOrFail($request->product_id);
-        $shippingCost = $request->shipping_type === 'express' ? 25000 : 15000;
+        $shippingCost = $request->shipping_type === 'SiCepat' ? 20000 : 17000;
 
         $transaction = Transaction::create([
             'buyer_id' => Auth::id(),
             'store_id' => $product->store_id,
-            'code' => Str::random(8),
+            'code' => Str::upper(Str::random(10)),
+            'receiver_name' => $request->receiver_name,
+            'receiver_phone' => $request->phone,
             'address' => $request->address,
             'shipping_type' => $request->shipping_type,
             'shipping_cost' => $shippingCost,
@@ -49,8 +60,7 @@ class CheckoutController extends Controller
 
         if ($request->payment_method == 'wallet') {
             return redirect()->route('payment.wallet', $transaction->id);
-        } 
-        else {
+        } else {
             return redirect()->route('payment.va', $transaction->id);
         }
     }
