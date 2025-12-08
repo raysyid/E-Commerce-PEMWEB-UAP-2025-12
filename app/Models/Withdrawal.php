@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WithDrawal extends Model
+class Withdrawal extends Model
 {
+    use HasFactory;
 
     protected $fillable = [
         'store_balance_id',
@@ -15,9 +17,4 @@ class WithDrawal extends Model
         'bank_name',
         'status',
     ];
-
-    public function storeBalance()
-    {
-        return $this->belongsTo(StoreBalance::class);
-    }
 }
