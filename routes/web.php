@@ -44,7 +44,7 @@ Route::get('/dashboard', function () {
     if (Auth::user()->role === 'seller') return redirect()->route('seller.dashboard');
     if (Auth::user()->role === 'admin') return redirect()->route('admin.dashboard');
 
-    return redirect()->route('home'); // member balik ke home
+    return redirect()->route('home');
 })->name('dashboard');
 
 
@@ -76,33 +76,30 @@ Route::middleware(['auth', 'isMember'])->group(function () {
 |--------------------------------------------------------------------------
 | SELLER AREA
 |--------------------------------------------------------------------------
-|
-| prefix = seller/
-| name = seller.
-|
-| Jadi otomatis:
-| /seller/dashboard → route('seller.dashboard')
-| /seller/profile   → route('seller.profile')
-| /seller/products  → route('seller.products.index')
-|--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'isSeller'])->prefix('seller')->name('seller.')->group(function () {
 
     Route::get('/dashboard', [SellerDashboardController::class, 'index'])->name('dashboard');
 
+    // Profil
     Route::get('/profile', [SellerProfileController::class, 'index'])->name('profile');
     Route::post('/profile', [SellerProfileController::class, 'update'])->name('profile.update');
 
+    // Kategori & Produk
     Route::resource('categories', SellerCategoryController::class)->except(['show']);
     Route::resource('/products', SellerProductController::class);
 
+    // Pesanan
     Route::get('/orders', [SellerOrderController::class, 'index'])->name('orders');
     Route::patch('/orders/{id}', [SellerOrderController::class, 'update'])->name('orders.update');
 
+    // Saldo Toko
     Route::get('/balance', [SellerBalanceController::class, 'index'])->name('balance');
 
+    // Withdraw
     Route::resource('/withdrawals', SellerWithdrawalController::class)->only(['index', 'store']);
 });
+
 
 /*
 |--------------------------------------------------------------------------
@@ -126,5 +123,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
 
 require __DIR__ . '/auth.php';
