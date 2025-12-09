@@ -110,11 +110,6 @@ Route::middleware(['auth', 'isSeller'])
 
     // Saldo Toko
     Route::get('/balance', [SellerBalanceController::class, 'index'])->name('balance');
-<<<<<<< HEAD
-
-    // Withdraw
-=======
->>>>>>> 3c4b23d (membuat halaman daftar pesanan dan perbaikan daftar toko)
     Route::resource('/withdrawals', SellerWithdrawalController::class)->only(['index', 'store']);
 });
 
