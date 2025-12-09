@@ -10,6 +10,11 @@ class Transaction extends Model
         'code',
         'buyer_id',
         'store_id',
+
+        // Wajib dimasukkan (supaya tidak diabaikan)
+        'receiver_name',
+        'receiver_phone',
+
         'address',
         'address_id',
         'city',
@@ -23,16 +28,6 @@ class Transaction extends Model
         'payment_status',
     ];
 
-    protected $casts = [
-        'shipping_cost' => 'decimal:2',
-        'tax' => 'decimal:2',
-        'grand_total' => 'decimal:2',
-    ];
-
-    public function buyer()
-    {
-        return $this->belongsTo(Buyer::class);
-    }
     public function store()
     {
         return $this->belongsTo(Store::class);
@@ -42,8 +37,9 @@ class Transaction extends Model
     {
         return $this->hasMany(TransactionDetail::class);
     }
-    public function productReviews()
+
+    public function buyer()
     {
-        return $this->hasMany(ProductReview::class);
+        return $this->belongsTo(\App\Models\User::class, 'buyer_id');
     }
 }

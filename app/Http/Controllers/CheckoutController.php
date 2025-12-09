@@ -28,26 +28,35 @@ class CheckoutController extends Controller
     public function process(Request $request)
     {
         $request->validate([
-            'receiver_name' => 'required',
-            'phone' => 'required',
             'address' => 'required',
             'shipping_type' => 'required',
             'payment_method' => 'required',
         ]);
 
         $product = Product::findOrFail($request->product_id);
-        $shippingCost = $request->shipping_type === 'express' ? 20000 : 17000;
+        $store   = $product->store; // ambil data city & postal_code toko
+
+        $shippingCost = match ($request->shipping_type) {
+            'express' => 20000,   // SiCepat
+            'jne'     => 22000,   // JNE
+            default   => 17000,   // JNT
+        };
 
         $transaction = Transaction::create([
-            'buyer_id' => Auth::id(),
-            'store_id' => $product->store_id,
-            'code' => Str::upper(Str::random(10)),
-            'receiver_name' => $request->receiver_name,
-            'receiver_phone' => $request->phone,
-            'address' => $request->address,
+            'buyer_id'      => Auth::id(),
+            'store_id'      => $product->store_id,
+            'code'          => Str::upper(Str::random(10)),
+            'address'       => $request->address,
+            'address_id'    => null,
+            'city'          => $store->city ?? 'Unknown',
+            'postal_code'   => $store->postal_code ?? '00000',
+            'shipping'      => $request->shipping_type == 'express'
+                ? 'SiCepat'
+                : ($request->shipping_type == 'jne' ? 'JNE' : 'JNT'),
             'shipping_type' => $request->shipping_type,
             'shipping_cost' => $shippingCost,
-            'grand_total' => $product->price + $shippingCost,
+            'grand_total'   => $product->price + $shippingCost,
+            'tax'           => 0,
             'payment_status' => 'unpaid',
         ]);
 

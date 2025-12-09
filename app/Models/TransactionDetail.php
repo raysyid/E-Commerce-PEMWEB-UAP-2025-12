@@ -6,16 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class TransactionDetail extends Model
 {
-
     protected $fillable = [
         'transaction_id',
         'product_id',
         'qty',
-        'subtotal',
-    ];
-
-    protected $casts = [
-        'subtotal' => 'decimal:2',
+        'subtotal'
     ];
 
     public function transaction()

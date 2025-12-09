@@ -4,6 +4,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
+// Tambahkan import default middleware
+use Illuminate\Auth\Middleware\Authenticate;
+use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
+
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__ . '/../routes/web.php',
@@ -12,13 +16,15 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
 
-        // 🔹 Buat alias middleware custom
+        // 📌 daftar alias middleware
         $middleware->alias([
-            'isMember' => \App\Http\Middleware\EnsureIsMember::class,
-            'isSeller' => \App\Http\Middleware\EnsureIsSeller::class,
-            'isAdmin'  => \App\Http\Middleware\EnsureIsAdmin::class,
+            'auth'      => Authenticate::class,
+            'verified'  => EnsureEmailIsVerified::class,
+            'isSeller'  => \App\Http\Middleware\EnsureIsSeller::class,
+            'isMember'  => \App\Http\Middleware\EnsureIsMember::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
-    })->create();
+    })
+    ->create();

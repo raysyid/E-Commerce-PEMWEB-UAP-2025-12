@@ -48,12 +48,12 @@
 
             <a href="{{ route('seller.categories.index') }}"
                 class="p-4 border rounded-lg shadow-sm text-center bg-gray-50 hover:bg-gray-100">
-                🏷️ <br> <span class="font-medium">Kategori Produk</span>
+                🏷️ <br> <span class="font-medium">Daftar Kategori</span>
             </a>
 
             <a href="{{ route('seller.products.index') }}"
                 class="p-4 border rounded-lg shadow-sm text-center bg-gray-50 hover:bg-gray-100">
-                📦 <br> <span class="font-medium">Produk</span>
+                📦 <br> <span class="font-medium">Daftar Produk</span>
             </a>
 
             <a href="{{ route('seller.orders') }}"

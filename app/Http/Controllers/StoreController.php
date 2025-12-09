@@ -11,6 +11,12 @@ class StoreController extends Controller
 {
     public function create()
     {
+        // jika user sudah jadi seller, tidak boleh daftar lagi
+        if (Auth::check() && Auth::user()->role === 'seller') {
+            return redirect()->route('seller.dashboard')
+                ->with('error', 'Kamu sudah memiliki toko.');
+        }
+
         return view('seller.store-register');
     }
 
@@ -26,9 +32,7 @@ class StoreController extends Controller
         ]);
 
         $userId = Auth::id();
-        $addressCode = 'ADDR-' . str_pad($userId, 3, '0', STR_PAD_LEFT);
 
-        // SIMPAN DATA TOKO
         Store::create([
             'user_id'     => $userId,
             'name'        => strtolower($request->name),
@@ -38,11 +42,10 @@ class StoreController extends Controller
             'city'        => $request->city,
             'address'     => $request->address,
             'postal_code' => $request->postal_code ?? '-',
-            'address_id'  => $addressCode,
+            'address_id'  => 'ADDR-' . $userId,
             'is_verified' => false,
         ]);
 
-        // UPDATE ROLE USER MENJADI SELLER
         User::where('id', $userId)->update([
             'role' => 'seller'
         ]);

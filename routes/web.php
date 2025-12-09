@@ -15,6 +15,7 @@ use App\Http\Controllers\SellerOrderController;
 use App\Http\Controllers\SellerBalanceController;
 use App\Http\Controllers\SellerWithdrawalController;
 use App\Http\Controllers\SellerCategoryController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,7 +64,18 @@ Route::middleware('auth')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| REGISTRASI TOKO (MEMBER SAJA)
+| PAYMENT PAGE (VA & WALLET)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+    Route::get('/payment/va/{id}', [PaymentController::class, 'showVA'])->name('payment.va');
+    Route::get('/payment/wallet/{id}', [PaymentController::class, 'showWallet'])->name('payment.wallet');
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| REGISTER TOKO (KHUSUS MEMBER)
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'isMember'])->group(function () {
@@ -77,7 +89,10 @@ Route::middleware(['auth', 'isMember'])->group(function () {
 | SELLER AREA
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'isSeller'])->prefix('seller')->name('seller.')->group(function () {
+Route::middleware(['auth', 'isSeller'])
+    ->prefix('seller')
+    ->name('seller.')
+    ->group(function () {
 
     Route::get('/dashboard', [SellerDashboardController::class, 'index'])->name('dashboard');
 
@@ -95,8 +110,11 @@ Route::middleware(['auth', 'isSeller'])->prefix('seller')->name('seller.')->grou
 
     // Saldo Toko
     Route::get('/balance', [SellerBalanceController::class, 'index'])->name('balance');
+<<<<<<< HEAD
 
     // Withdraw
+=======
+>>>>>>> 3c4b23d (membuat halaman daftar pesanan dan perbaikan daftar toko)
     Route::resource('/withdrawals', SellerWithdrawalController::class)->only(['index', 'store']);
 });
 

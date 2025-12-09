@@ -16,8 +16,8 @@ class DatabaseSeeder extends Seeder
             MemberUserSeeder::class,
             StoreSeeder::class,
 
-            StoreBalanceSeeder::class,   // ✅ WAJIB sebelum withdrawal
-            WithdrawalSeeder::class,    // ✅ BARU BOLEH withdraw
+            StoreBalanceSeeder::class,
+            WithdrawalSeeder::class,
 
             ProductCategorySeeder::class,
             ProductSeeder::class,
