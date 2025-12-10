@@ -69,7 +69,7 @@ Route::middleware('auth')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| REGISTER TOKO (KHUSUS MEMBER)
+| REGISTER TOKO
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'isMember'])->group(function () {
@@ -150,13 +150,33 @@ Route::middleware(['auth', 'isAdmin'])
 
 /*
 |--------------------------------------------------------------------------
-| PROFILE USER
+| USER PROFILE (FIX ERROR profile.edit)
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile/edit', function () {
+        return view('profile.edit');
+    })->name('profile.edit');
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| USER WALLET (TOPUP, HISTORY, PAYMENT)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+
+    Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
+    Route::get('/wallet/history', [WalletController::class, 'history'])->name('wallet.history');
+    Route::get('/wallet/topup', [WalletController::class, 'topup'])->name('wallet.topup');
+
+    // PAY (yang tadi kamu bilang tidak muncul)
+    Route::get('/wallet/pay', [WalletController::class, 'pay'])->name('wallet.pay');
+
+    // Tambahan sebenarnya diperlukan untuk menu pembayaran
+    Route::get('/wallet/payment/{id}', [WalletController::class, 'payment'])
+        ->name('wallet.payment');
 });
 
 
