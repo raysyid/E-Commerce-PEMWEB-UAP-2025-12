@@ -21,29 +21,53 @@
     </div>
 
     {{-- Auth --}}
-    <div class="relative text-sm font-semibold">
+    <div class="flex items-center gap-6 text-sm font-semibold">
+
       @guest
       <a href="{{ route('login') }}" class="hover:underline">Login</a>
       <a href="{{ route('register') }}" class="hover:underline">Daftar</a>
       @else
 
-      <div class="group inline-block relative">
+      {{-- MEMBER ONLY → WALLET ICON --}}
+      @if(auth()->user()->role === 'member')
+      <a href="{{ route('wallet.index') }}"
+        class="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor"
+          viewBox="0 0 24 24">
+          <path d="M20 7h-2V5a1 1 0 0 0-1-1H5a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h14a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1zm-4-2v2H5a1 1 0 0 1 0-2h11zm3 14H5a1 1 0 0 1-1-1V8h15v11z" />
+          <circle cx="15" cy="13" r="2" />
+        </svg>
+      </a>
+      @endif
 
-        {{-- Trigger (nama user + ikon optional) --}}
+      {{-- SELLER ONLY → TOMBOL TOKO --}}
+      @if(auth()->user()->role === 'seller' && auth()->user()->store)
+      <a href="{{ route('seller.dashboard') }}"
+        class="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition">
+        🏪 Toko Saya
+      </a>
+      @endif
+
+      {{-- ADMIN ONLY → TOMBOL ADMIN PANEL --}}
+      @if(auth()->user()->role === 'admin')
+      <a href="{{ route('admin.dashboard') }}"
+        class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">
+        🛠 Admin Panel
+      </a>
+      @endif
+
+      {{-- DROPDOWN --}}
+      <div class="group inline-block relative">
         <button class="flex items-center gap-1 text-gray-800">
           {{ auth()->user()->name }}
           <span class="text-xs">▼</span>
         </button>
 
-        {{-- Dropdown --}}
-        <div
-          class="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg 
-                opacity-0 invisible group-hover:opacity-100 group-hover:visible 
-                transition-all duration-150 z-50">
+        <div class="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg 
+                      opacity-0 invisible group-hover:opacity-100 group-hover:visible 
+                      transition-all duration-150 z-50">
           <a href="{{ route('profile.edit') }}"
-            class="block px-4 py-2 hover:bg-gray-100 text-gray-700">
-            Profil
-          </a>
+            class="block px-4 py-2 hover:bg-gray-100 text-gray-700">Profil</a>
 
           <form action="{{ route('logout') }}" method="POST">
             @csrf
@@ -58,6 +82,7 @@
       @endguest
     </div>
   </nav>
+
 
   {{-- KATEGORI --}}
   <div class="px-10 py-3 text-sm text-gray-600 flex gap-6 font-medium">
@@ -91,7 +116,7 @@
 
   {{-- TRENDING ITEM --}}
   <section class="px-10 my-10">
-    <h3 class="text-xl font-bold mb-4">TRENDING ITEM</h3>
+    <h3 class="text-xl font-bold mb-4">New Items</h3>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
       @foreach ($products as $product)

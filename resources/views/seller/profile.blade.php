@@ -1,10 +1,10 @@
 <x-app-layout>
     <div class="max-w-5xl mx-auto py-10 px-6">
 
-        <h1 class="text-3xl font-bold mb-6">Profil Toko</h1>
+        <h1 class="text-3xl font-bold mb-6 text-center">Profil Toko</h1>
 
         {{-- Card Container --}}
-        <div class="bg-white border rounded-lg shadow-sm p-6">
+        <div class="bg-white border rounded-lg shadow-sm p-8 max-w-2xl mx-auto">
 
             <form method="POST" enctype="multipart/form-data" action="{{ route('seller.profile.update') }}">
                 @csrf
@@ -53,11 +53,12 @@
                 <div class="mb-5">
                     <label class="block font-semibold text-gray-700 mb-1">Logo Toko</label>
                     <input type="file" name="logo"
+                        accept="image/png, image/jpeg, image/jpg, image/webp"
                         class="border w-full px-3 py-2 rounded cursor-pointer">
-
+                    <p class="text-xs text-gray-500 mb-3">Format: JPG, PNG, WEBP — Max 2MB</p>
                     @if($store->logo)
-                        <img src="{{ asset('storage/store_logo/'.$store->logo) }}"
-                             class="w-20 h-20 object-cover mt-3 rounded-full border">
+                    <img src="{{ asset('storage/store/'.$store->logo) }}"
+                        class="w-20 h-20 object-cover mt-3 rounded-full border">
                     @endif
                 </div>
 
@@ -70,7 +71,6 @@
                 </div>
 
             </form>
-
         </div>
     </div>
 </x-app-layout>

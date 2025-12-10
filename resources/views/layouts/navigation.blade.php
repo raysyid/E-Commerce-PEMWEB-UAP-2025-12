@@ -13,9 +13,20 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     @auth
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        Dashboard
-                    </x-nav-link>
+                        {{-- Dashboard --}}
+                        @if(Auth::user()->role === 'seller')
+                            <x-nav-link :href="route('seller.dashboard')" :active="request()->routeIs('seller.dashboard')">
+                                Dashboard Seller
+                            </x-nav-link>
+                        @elseif(Auth::user()->role === 'admin')
+                            <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                                Dashboard Admin
+                            </x-nav-link>
+                        @else
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                Dashboard
+                            </x-nav-link>
+                        @endif
                     @endauth
                 </div>
             </div>
@@ -39,9 +50,23 @@
 
                     @auth
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            Profile
-                        </x-dropdown-link>
+
+                        {{-- Profile menu berdasarkan role --}}
+                        @if(Auth::user()->role === 'seller')
+                            <x-dropdown-link :href="route('seller.profile')">
+                                Profil Toko
+                            </x-dropdown-link>
+
+                        @elseif(Auth::user()->role === 'admin')
+                            <x-dropdown-link :href="route('admin.dashboard')">
+                                Admin Panel
+                            </x-dropdown-link>
+
+                        @else
+                            <x-dropdown-link :href="route('profile.edit')">
+                                Profile
+                            </x-dropdown-link>
+                        @endif
 
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -76,16 +101,19 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             @auth
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                Dashboard
-            </x-responsive-nav-link>
+                @if(Auth::user()->role === 'seller')
+                    <x-responsive-nav-link :href="route('seller.dashboard')">Dashboard Seller</x-responsive-nav-link>
+                @elseif(Auth::user()->role === 'admin')
+                    <x-responsive-nav-link :href="route('admin.dashboard')">Dashboard Admin</x-responsive-nav-link>
+                @else
+                    <x-responsive-nav-link :href="route('dashboard')">Dashboard</x-responsive-nav-link>
+                @endif
             @endauth
         </div>
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
-            
-            {{-- IF LOGIN --}}
+
             @auth
                 <div class="px-4">
                     <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
@@ -93,9 +121,22 @@
                 </div>
 
                 <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link :href="route('profile.edit')">
-                        Profile
-                    </x-responsive-nav-link>
+
+                    @if(Auth::user()->role === 'seller')
+                        <x-responsive-nav-link :href="route('seller.profile')">
+                            Profil Toko
+                        </x-responsive-nav-link>
+
+                    @elseif(Auth::user()->role === 'admin')
+                        <x-responsive-nav-link :href="route('admin.dashboard')">
+                            Admin Panel
+                        </x-responsive-nav-link>
+
+                    @else
+                        <x-responsive-nav-link :href="route('profile.edit')">
+                            Profile
+                        </x-responsive-nav-link>
+                    @endif
 
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
@@ -107,13 +148,13 @@
                 </div>
             @endauth
 
-            {{-- IF GUEST --}}
             @guest
                 <div class="px-4 space-y-3">
-                    <a href="{{ route('login') }}" class="block text-sm text-gray-700 hover:text-gray-900">Masuk</a>
-                    <a href="{{ route('register') }}" class="block text-sm text-gray-700 hover:text-gray-900">Daftar</a>
+                    <a href="{{ route('login') }}" class="block text-sm text-gray-700">Masuk</a>
+                    <a href="{{ route('register') }}" class="block text-sm text-gray-700">Daftar</a>
                 </div>
             @endguest
+
         </div>
     </div>
 </nav>

@@ -3,41 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Models\Store;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class SellerProfileController extends Controller
 {
     public function index()
     {
-        $store = Store::where('user_id', Auth::id())->first();
-
-        if (!$store) {
-            return redirect()->route('store.register')
-                ->with('error', 'Kamu belum punya toko, silakan daftar dulu.');
-        }
-
+        $store = Auth::user()->store;
         return view('seller.profile', compact('store'));
     }
 
     public function update(Request $request)
     {
-        $store = Store::where('user_id', Auth::id())->first();
-
-        if (!$store) {
-            return redirect()->route('store.register')
-                ->with('error', 'Kamu belum punya toko.');
-        }
-
         $request->validate([
             'name'   => 'required|string|max:255',
-            'about'  => 'nullable|string|max:500',
             'phone'  => 'required|string|max:20',
             'city'   => 'required|string|max:100',
-            'address'=> 'required|string',
-            'logo'   => 'nullable|image|max:2048',
+            'address' => 'required|string',
+            'about'  => 'nullable|string|max:500',
+            'logo'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
+        $store = Auth::user()->store;
+
+        // 🔥 Extra Security Check (mencegah file disamarkan jadi .jpg padahal bukan gambar)
+        if ($request->hasFile('logo')) {
+            if (!in_array($request->logo->getMimeType(), ['image/jpeg', 'image/png', 'image/webp'])) {
+                return back()->with('error', 'Format logo tidak valid.');
+            }
+        }
+
+        // Update field biasa
         $store->update([
             'name'    => $request->name,
             'about'   => $request->about,
@@ -46,17 +44,23 @@ class SellerProfileController extends Controller
             'address' => $request->address,
         ]);
 
-        // Upload logo jika ada
+        // 🔥 Jika upload logo baru → hapus lama dan simpan baru
         if ($request->hasFile('logo')) {
-            $file = $request->file('logo');
-            $filename = time().'_'.$file->getClientOriginalName();
-            $file->storeAs('public/store_logo', $filename);
 
-            $store->update(['logo' => $filename]);
+            // hapus file lama jika bukan default.png
+            if ($store->logo && $store->logo !== 'default.png') {
+                Storage::delete('store/' . $store->logo);
+            }
+
+            // simpan logo baru
+            $newLogo = time() . '.' . $request->logo->extension();
+            $request->logo->storeAs('store', $newLogo);
+
+            $store->logo = $newLogo;
+            $store->save();
         }
 
-        return redirect()
-            ->route('seller.dashboard')
+        return redirect()->route('seller.dashboard')
             ->with('success', 'Profil toko berhasil diperbarui!');
     }
 }

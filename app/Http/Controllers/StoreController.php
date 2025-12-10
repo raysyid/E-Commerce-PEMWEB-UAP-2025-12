@@ -29,20 +29,29 @@ class StoreController extends Controller
             'city'        => 'required|string|max:100',
             'postal_code' => 'nullable|string|max:10',
             'about'       => 'nullable|string|max:500',
+            'logo'        => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
         ]);
 
         $userId = Auth::id();
+        $addressCode = 'ADDR-' . str_pad($userId, 3, '0', STR_PAD_LEFT);
+
+        // Upload logo jika ada
+        $logoName = 'default.png';
+        if ($request->hasFile('logo')) {
+            $logoName = time() . '.' . $request->logo->extension();
+            $request->logo->storeAs('store', $logoName);
+        }
 
         Store::create([
             'user_id'     => $userId,
             'name'        => strtolower($request->name),
-            'logo'        => 'default.png',
+            'logo'        => $logoName,
             'about'       => $request->about ?? '-',
             'phone'       => $request->phone,
             'city'        => $request->city,
             'address'     => $request->address,
             'postal_code' => $request->postal_code ?? '-',
-            'address_id'  => 'ADDR-' . $userId,
+            'address_id'  => $addressCode,
             'is_verified' => false,
         ]);
 
