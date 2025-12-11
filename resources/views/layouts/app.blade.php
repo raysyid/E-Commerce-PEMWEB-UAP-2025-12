@@ -18,25 +18,31 @@
 
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100">
+
+        {{-- NAVBAR CUSTOM --}}
         @include('layouts.navigation')
 
-        <!-- Page Heading -->
+        {{-- Page Heading (opsional Jetstream) --}}
         @isset($header)
-        <header class="bg-white shadow">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                {{ $header }}
-            </div>
-        </header>
+            <header class="bg-white shadow">
+                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    {{ $header }}
+                </div>
+            </header>
         @endisset
 
-        <!-- Page Content -->
+        {{-- Page Content --}}
         <main>
             @isset($slot)
-            {{ $slot }} {{-- untuk <x-app-layout> --}}
+                {{ $slot }}
             @else
-            @yield('content') {{-- untuk @extends --}}
+                @yield('content')
             @endisset
         </main>
+
+        {{-- FOOTER CUSTOM --}}
+        @include('layouts.footer')
+
     </div>
 </body>
 
