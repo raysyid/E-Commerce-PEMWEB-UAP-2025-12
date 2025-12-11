@@ -73,4 +73,17 @@ class CheckoutController extends Controller
             return redirect()->route('payment.va', $transaction->id);
         }
     }
+
+    /**
+     * Riwayat Pembelian Produk
+     */
+    public function history()
+    {
+        $transactions = Transaction::where('buyer_id', Auth::id())
+            ->with(['transactionDetails.product', 'store'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('checkout.history', compact('transactions'));
+    }
 }

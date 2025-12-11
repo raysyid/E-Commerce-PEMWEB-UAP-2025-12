@@ -25,51 +25,52 @@ class SellerOrderController extends Controller
             ->where('store_id', Auth::user()->store->id)
             ->firstOrFail();
 
-        $newStatus = request('payment_status');
+        // Hanya order yang paid bisa dikirim
+        if ($transaction->payment_status !== 'paid') {
+            return back()->with('error', 'Hanya pesanan yang sudah dibayar yang bisa dikirim.');
+        }
 
-        /**
-         * Seller hanya boleh update secara berurutan:
-         * paid → processing → shipped → completed
-         */
-        $allowedFlow = [
-            'paid'       => 'processing',
-            'processing' => 'shipped',
-            'shipped'    => 'completed',
-        ];
-
-        // Jika status tidak urut → tolak update
-        if (!isset($allowedFlow[$transaction->payment_status]) ||
-            $allowedFlow[$transaction->payment_status] !== $newStatus) {
-            return back()->with('error', 'Status tidak valid untuk diperbarui.');
+        // Cek jika sudah punya tracking number (sudah dikirim)
+        if ($transaction->tracking_number) {
+            return back()->with('error', 'Pesanan ini sudah dikirim sebelumnya.');
         }
 
         /**
-         * 🚚 Jika status berubah menjadi "shipped"
-         * generate nomor resi sekali saja
+         * 🚚 Generate tracking number
          */
-        if ($newStatus === 'shipped') {
-
-            $prefix = match ($transaction->shipping_type) {
-                'express' => 'SC',
-                'jne'     => 'JNE',
-                default   => 'JNT',
-            };
-
-            if (!$transaction->tracking_number) {
-                $transaction->tracking_number = $prefix . rand(100000, 999999);
-            }
-        }
-
-        /**
-         * Jika status bukan shipped → tracking_number kembali null
-         */
-        if ($newStatus !== 'shipped') {
-            $transaction->tracking_number = null;
-        }
-
-        $transaction->payment_status = $newStatus;
+        $prefix = match ($transaction->shipping_type) {
+            'express' => 'SC',
+            'jne'     => 'JNE',
+            default   => 'JNT',
+        };
+        $transaction->tracking_number = $prefix . rand(100000, 999999);
         $transaction->save();
 
-        return back()->with('success', 'Status pesanan berhasil diperbarui');
+        /**
+         * 💰 Transfer uang ke seller saat kirim barang
+         */
+        $store = Auth::user()->store;
+        
+        $storeBalance = \App\Models\StoreBalance::firstOrCreate(
+            ['store_id' => $store->id],
+            ['balance' => 0]
+        );
+        
+        $storeBalance->balance += $transaction->grand_total;
+        $storeBalance->save();
+        
+        // Log history
+        if (class_exists('\App\Models\StoreBalanceHistory')) {
+            \App\Models\StoreBalanceHistory::create([
+                'store_balance_id' => $storeBalance->id,
+                'type' => 'income',
+                'amount' => $transaction->grand_total,
+                'remarks' => 'Pembayaran dari pesanan #' . $transaction->code,
+                'reference_type' => 'transaction',
+                'reference_id' => $transaction->id
+            ]);
+        }
+
+        return back()->with('success', 'Pesanan berhasil dikirim! Nomor resi: ' . $transaction->tracking_number);
     }
 }

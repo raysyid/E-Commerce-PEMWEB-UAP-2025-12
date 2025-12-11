@@ -17,18 +17,22 @@
             <div>
                 <label class="block text-sm font-medium mb-1">Alamat Lengkap</label>
                 <textarea name="address"
-                    class="w-full border rounded-lg px-4 py-2 h-28 focus:ring focus:ring-black/20" required></textarea>
+                    class="w-full border rounded-lg px-4 py-2 h-28 focus:ring focus:ring-black/20"
+                    placeholder="Masukkan alamat lengkap..."
+                    required></textarea>
             </div>
 
             {{-- Pengiriman --}}
             <div>
                 <label class="block text-sm font-medium mb-1">Metode Pengiriman</label>
                 <select name="shipping_type"
-                    class="w-full border rounded-lg px-4 py-2 focus:ring focus:ring-black/20" required>
+                    id="shippingSelect"
+                    class="w-full border rounded-lg px-4 py-2 focus:ring focus:ring-black/20"
+                    required>
                     <option value="">Pilih Metode Pengiriman</option>
-                    <option value="standard">JNT Rp 17.000</option>
-                    <option value="express">SiCepat Rp 20.000</option>
-                    <option value="jne">JNE Rp 22.000</option>
+                    <option value="standard">JNT — Rp 17.000</option>
+                    <option value="express">SiCepat — Rp 20.000</option>
+                    <option value="jne">JNE — Rp 22.000</option>
                 </select>
             </div>
 
@@ -36,7 +40,8 @@
             <div>
                 <label class="block text-sm font-medium mb-1">Metode Pembayaran</label>
                 <select name="payment_method"
-                    class="w-full border rounded-lg px-4 py-2 focus:ring focus:ring-black/20" required>
+                    class="w-full border rounded-lg px-4 py-2 focus:ring focus:ring-black/20"
+                    required>
                     <option value="">Pilih Metode Pembayaran</option>
                     <option value="wallet">Saldo Wallet</option>
                     <option value="va">Virtual Account</option>
@@ -47,7 +52,9 @@
     </div>
 
     {{-- ================= RIGHT: ORDER ================= --}}
-    <div class="border rounded-xl p-6 shadow-sm">
+    <div id="orderSummary"
+         class="border rounded-xl p-6 shadow-sm"
+         data-price="{{ $product->price }}">
 
         <div class="flex justify-between items-start mb-6">
             <h3 class="text-lg font-bold">Ringkasan Pesanan</h3>
@@ -71,12 +78,12 @@
 
             <div class="flex justify-between">
                 <span>Pengiriman</span>
-                <span id="ship">Rp 17.000</span>
+                <span id="ship">-</span>
             </div>
 
             <div class="flex justify-between font-bold text-lg border-t pt-2">
                 <span>Total</span>
-                <span id="total">Rp {{ number_format($product->price + 17000) }}</span>
+                <span id="total">Rp {{ number_format($product->price) }}</span>
             </div>
         </div>
 
@@ -88,5 +95,28 @@
 
     </div>
 </div>
+
+{{-- ================= JS ONGKIR ================= --}}
+<script>
+    const orderBox = document.getElementById('orderSummary');
+    const productPrice = Number(orderBox.dataset.price || 0);
+
+    const shipText = document.getElementById('ship');
+    const totalText = document.getElementById('total');
+    const select = document.getElementById('shippingSelect');
+
+    const rates = {
+        standard: 17000,
+        express: 20000,
+        jne: 22000
+    };
+
+    select.addEventListener('change', function () {
+        const ship = rates[this.value] ?? 0;
+
+        shipText.textContent = "Rp " + ship.toLocaleString("id-ID");
+        totalText.textContent = "Rp " + (productPrice + ship).toLocaleString("id-ID");
+    });
+</script>
 
 @endsection

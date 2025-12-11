@@ -16,7 +16,7 @@ class MemberUserSeeder extends Seeder
             'email' => 'lona@gmail.com',
             'phone_number' => '083333333333',
             'password' => Hash::make('lona123'),
-            'role' => 'member'
+            'role' => 'seller'
         ]);
 
         // Member 2

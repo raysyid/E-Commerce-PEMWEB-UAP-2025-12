@@ -18,9 +18,10 @@ use App\Http\Controllers\SellerCategoryController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\WalletController;
 
+
 /*
 |--------------------------------------------------------------------------
-| HOME / LANDING (seller & admin tetap bisa lihat homepage)
+| HOME / LANDING
 |--------------------------------------------------------------------------
 */
 Route::get('/', fn() => app(LandingController::class)->index())->name('home');
@@ -35,7 +36,6 @@ Route::get('/dashboard', function () {
 
     if (!Auth::check()) return redirect()->route('login');
 
-    // tetap diarahkan jika dashboard diakses manual
     if (Auth::user()->role === 'admin') return redirect()->route('admin.dashboard');
     if (Auth::user()->role === 'seller') return redirect()->route('seller.dashboard');
 
@@ -45,34 +45,50 @@ Route::get('/dashboard', function () {
 
 /*
 |--------------------------------------------------------------------------
-| DETAIL PRODUK & CHECKOUT
+| PRODUK & CHECKOUT
 |--------------------------------------------------------------------------
 */
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.detail');
 
 Route::middleware('auth')->group(function () {
+
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+    
+    // Riwayat Pembelian Produk
+    Route::get('/history', [CheckoutController::class, 'history'])->name('purchase.history');
 });
 
 
 /*
 |--------------------------------------------------------------------------
-| PAYMENT PAGE VA & WALLET
+| PAYMENT CENTRAL PAGE (WAJIB)
 |--------------------------------------------------------------------------
+| Dipakai:
+| - Pembelian produk (VA-TRX-xxx)
+| - Topup saldo (VA-TOPUP-xxx)
 */
-Route::middleware('auth')->group(function () {
-    Route::get('/payment/va/{id}', [PaymentController::class, 'showVA'])->name('payment.va');
-    Route::get('/payment/wallet/{id}', [PaymentController::class, 'showWallet'])->name('payment.wallet');
-});
+Route::middleware('auth')
+    ->prefix('payment')
+    ->name('payment.')
+    ->group(function () {
+
+        Route::post('/check', [PaymentController::class, 'check'])->name('check');
+        Route::post('/confirm', [PaymentController::class, 'confirm'])->name('confirm');
+
+        Route::get('/va/{id}', [PaymentController::class, 'showVA'])->name('va');
+        Route::get('/wallet/{id}', [PaymentController::class, 'showWallet'])->name('wallet');
+        Route::post('/wallet/{id}', [PaymentController::class, 'processWallet'])->name('process.wallet');
+    });
 
 
 /*
 |--------------------------------------------------------------------------
-| REGISTER TOKO (KHUSUS MEMBER)
+| REGISTER TOKO
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'isMember'])->group(function () {
+
     Route::get('/store/register', [StoreController::class, 'create'])->name('store.register');
     Route::post('/store/register', [StoreController::class, 'store'])->name('store.store');
 });
@@ -94,6 +110,7 @@ Route::middleware(['auth', 'isSeller'])
         Route::get('/pending', fn() => view('seller.pending'))->name('pending');
 
         Route::middleware('storeVerified')->group(function () {
+
             Route::get('/dashboard', [SellerDashboardController::class, 'index'])->name('dashboard');
             Route::resource('categories', SellerCategoryController::class)->except(['show']);
             Route::resource('products', SellerProductController::class);
@@ -107,16 +124,22 @@ Route::middleware(['auth', 'isSeller'])
 
 /*
 |--------------------------------------------------------------------------
-| WALLET (gabungkan dari temanmu)
+| WALLET USER
 |--------------------------------------------------------------------------
 */
-Route::middleware('auth')->prefix('wallet')->name('wallet.')->group(function () {
-    Route::get('/', [WalletController::class, 'index'])->name('index');
-    Route::get('/history', [WalletController::class, 'history'])->name('history');
-    Route::get('/topup', [WalletController::class, 'topup'])->name('topup');
-    Route::get('/pay', [WalletController::class, 'pay'])->name('pay');
-    Route::get('/payment/{id}', [WalletController::class, 'payment'])->name('payment');
-});
+Route::middleware('auth')
+    ->prefix('wallet')
+    ->name('wallet.')
+    ->group(function () {
+
+        Route::get('/', [WalletController::class, 'index'])->name('index');
+        Route::get('/history', [WalletController::class, 'history'])->name('history');
+
+        Route::get('/topup', [WalletController::class, 'topup'])->name('topup');
+        Route::post('/topup', [WalletController::class, 'submitTopup'])->name('topup.submit');
+
+        Route::get('/pay', [WalletController::class, 'pay'])->name('pay');
+    });
 
 
 /*
@@ -150,10 +173,11 @@ Route::middleware(['auth', 'isAdmin'])
 
 /*
 |--------------------------------------------------------------------------
-| PROFILE USER
+| USER PROFILE
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

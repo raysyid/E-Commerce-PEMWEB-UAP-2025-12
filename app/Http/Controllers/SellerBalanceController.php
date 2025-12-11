@@ -12,12 +12,15 @@ class SellerBalanceController extends Controller
     {
         $store = Auth::user()->store;
 
-        // Ambil saldo toko
-        $balance = StoreBalance::where('store_id', $store->id)->first();
+        // Ambil saldo toko (atau buat baru jika belum ada)
+        $balance = StoreBalance::firstOrCreate(
+            ['store_id' => $store->id],
+            ['balance' => 0]
+        );
 
         // Ambil riwayat saldo
         $histories = StoreBalanceHistory::where('store_balance_id', $balance->id)
-            ->latest()
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return view('seller.balance', compact('balance', 'histories'));

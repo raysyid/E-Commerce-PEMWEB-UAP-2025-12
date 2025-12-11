@@ -9,7 +9,7 @@
         </div>
 
         <div class="bg-gray-900 text-white text-center p-6 text-2xl rounded mb-8">
-            VA-{{ $transaction->id }}
+            VA-TRX-{{ $transaction->id }}
         </div>
 
         <h2 class="text-lg font-semibold">Detail Pembayaran</h2>

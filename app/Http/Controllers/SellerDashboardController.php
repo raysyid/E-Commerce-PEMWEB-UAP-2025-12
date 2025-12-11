@@ -22,7 +22,13 @@ class SellerDashboardController extends Controller
             'store'    => $store,
             'products' => $store->products()->count(),
             'orders'   => $store->transactions()
-                                 ->where('payment_status', 'unpaid')
+                                 ->where(function($query) {
+                                     $query->where('payment_status', 'unpaid')
+                                           ->orWhere(function($q) {
+                                               $q->where('payment_status', 'paid')
+                                                 ->whereNull('tracking_number');
+                                           });
+                                 })
                                  ->count(),
         ]);
     }
