@@ -128,9 +128,9 @@ Setelah menjalankan seeder, Anda dapat login dengan akun berikut:
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | admin@thriftsy.com | password |
-| Seller | seller@thriftsy.com | password |
-| Member | member@thriftsy.com | password |
+| Admin | admin1@gmail.com | admin123 |
+| Seller | lona@gmail.com | lona123 |
+| Member | agus@gmail.com | agus |
 
 ## 🗂️ Struktur Database
 
