@@ -101,13 +101,15 @@
                         <div class="flex items-start gap-4 mb-6 pb-6 border-b">
                             @php
                                 $thumbnail = $product->productImages->firstWhere('is_thumbnail', 1);
+                                $thumbnailPath = $thumbnail
+                                    ? (str_starts_with($thumbnail->image, 'seed-')
+                                        ? asset('assets/products-seed/' . str_replace('seed-', '', $thumbnail->image))
+                                        : asset('storage/products/' . $thumbnail->image))
+                                    : 'https://via.placeholder.com/80';
                             @endphp
                             
                             <div class="w-20 h-20 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0 border border-gray-200">
-                                <img src="{{ $thumbnail 
-                                        ? asset('storage/products/' . $thumbnail->image)
-                                        : 'https://via.placeholder.com/80'
-                                    }}"
+                                <img src="{{ $thumbnailPath }}"
                                     class="w-full h-full object-cover object-center">
                             </div>
 

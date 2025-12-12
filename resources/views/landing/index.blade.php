@@ -63,7 +63,7 @@
 
   {{-- HERO --}}
   <section class="relative h-[500px] overflow-hidden">
-    <img src="{{ asset('assets/foto/fotoLanding.jpeg') }}"
+    <img src="{{ asset('assets/foto/FotoLandingPage.jpg') }}"  
          class="absolute inset-0 w-full h-full object-cover"
          alt="Vintage Fashion">
    
@@ -74,7 +74,7 @@
     <div class="relative h-full flex items-center px-10 md:px-20">
       <div class="max-w-2xl text-white">
         <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6">
-          Jual-Beli<br>
+          temukan stylemu<br>
           baju preloved<br>
           dan thrift
         </h1>
