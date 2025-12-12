@@ -51,6 +51,19 @@ Route::get('/dashboard', function () {
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.detail');
 Route::get('/category/{slug}', [ProductController::class, 'category'])->name('category.browse');
 
+/*
+|--------------------------------------------------------------------------
+| REGISTER TOKO (MUST BE BEFORE /store/{id})
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth'])->group(function () {
+    Route::get('/store/register', [StoreController::class, 'create'])->name('store.register');
+    Route::post('/store/register', [StoreController::class, 'store'])->name('store.store');
+});
+
+// Store profile (wildcard route - must be after /store/register)
+Route::get('/store/{id}', [StoreController::class, 'show'])->name('store.show');
+
 Route::middleware('auth')->group(function () {
 
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
@@ -81,18 +94,6 @@ Route::middleware('auth')
         Route::get('/wallet/{id}', [PaymentController::class, 'showWallet'])->name('wallet');
         Route::post('/wallet/{id}', [PaymentController::class, 'processWallet'])->name('process.wallet');
     });
-
-
-/*
-|--------------------------------------------------------------------------
-| REGISTER TOKO
-|--------------------------------------------------------------------------
-*/
-Route::middleware(['auth', 'isMember'])->group(function () {
-
-    Route::get('/store/register', [StoreController::class, 'create'])->name('store.register');
-    Route::post('/store/register', [StoreController::class, 'store'])->name('store.store');
-});
 
 
 /*
@@ -159,7 +160,7 @@ Route::middleware(['auth', 'isAdmin'])
     ->name('admin.')
     ->group(function () {
 
-        Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+        Route::get('/', [\App\Http\Controllers\AdminDashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/verification', [\App\Http\Controllers\AdminVerificationController::class, 'index'])
             ->name('verification');

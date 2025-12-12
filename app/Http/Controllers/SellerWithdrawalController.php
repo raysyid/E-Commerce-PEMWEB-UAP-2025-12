@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Withdrawal;
 use App\Models\StoreBalance;
+use App\Models\StoreBalanceHistory;
 
 class SellerWithdrawalController extends Controller
 {
@@ -45,6 +46,10 @@ class SellerWithdrawalController extends Controller
             return back()->with('error', 'Saldo tidak mencukupi!');
         }
 
+        // Kurangi saldo
+        $balance->decrement('balance', $request->amount);
+
+        // Buat withdrawal request
         Withdrawal::create([
             'store_balance_id' => $balance->id,
             'amount' => $request->amount,
@@ -54,6 +59,14 @@ class SellerWithdrawalController extends Controller
             'status' => 'pending',
         ]);
 
-        return back()->with('success', 'Withdraw berhasil diajukan!');
+        // Catat history
+        StoreBalanceHistory::create([
+            'store_balance_id' => $balance->id,
+            'type' => 'withdraw',
+            'amount' => $request->amount,
+            'remarks' => 'Penarikan dana ke ' . $request->bank . ' - ' . $request->account_number,
+        ]);
+
+        return back()->with('success', 'Withdraw berhasil diajukan! Saldo telah dikurangi.');
     }
 }

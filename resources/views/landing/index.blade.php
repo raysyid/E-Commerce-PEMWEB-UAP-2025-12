@@ -86,7 +86,7 @@
           </a>
           @else
             @if(auth()->user()->role === 'member')
-            <a href="/store/register"
+            <a href="{{ route('store.register') }}"
               class="px-8 py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-100 transition">
               Mulai berjualan
             </a>
@@ -97,18 +97,26 @@
     </div>
   </section>
 
-  {{-- NEW ITEMS --}}
+  {{-- PRODUCTS / SEARCH RESULTS --}}
   <section class="px-10 py-16 bg-white">
     <div class="flex items-center justify-between mb-8">
-      <h3 class="text-3xl font-bold">Hot Items</h3>
-      <a href="#" class="text-sm font-semibold hover:underline flex items-center gap-1">
-        Lihat semua
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-        </svg>
-      </a>
+      @if($search)
+        <div>
+          <h3 class="text-3xl font-bold">Hasil Pencarian</h3>
+          <p class="text-gray-600 mt-2">Menampilkan hasil untuk "<span class="font-semibold">{{ $search }}</span>"</p>
+        </div>
+      @else
+        <h3 class="text-3xl font-bold">Newest Items</h3>
+        <a href="#" class="text-sm font-semibold hover:underline flex items-center gap-1">
+          Lihat semua
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </a>
+      @endif
     </div>
 
+    @if($products->count() > 0)
     <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
       @foreach ($products as $product)
       @php
@@ -136,6 +144,22 @@
       </a>
       @endforeach
     </div>
+
+    {{-- Pagination for search results --}}
+    @if($search && $products instanceof \Illuminate\Pagination\LengthAwarePaginator)
+    <div class="mt-8">
+      {{ $products->appends(['search' => $search])->links() }}
+    </div>
+    @endif
+    @else
+    <div class="text-center py-16">
+      <svg class="w-24 h-24 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+      <p class="text-gray-500 text-lg">Tidak ada produk ditemukan untuk "{{ $search }}"</p>
+      <a href="/" class="mt-4 inline-block text-blue-600 hover:underline">Kembali ke beranda</a>
+    </div>
+    @endif
   </section>
 
   {{-- REKOMENDASI TOKO --}}
@@ -152,7 +176,7 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
       @foreach ($stores as $store)
-      <div class="store-card bg-white rounded-xl p-6 text-center">
+      <a href="{{ route('store.show', $store->id) }}" class="store-card bg-white rounded-xl p-6 text-center block hover:shadow-xl transition">
         <div class="flex justify-center mb-4">
           <img src="{{ asset('storage/store/' . $store->logo) }}"
             onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed={{ $store->name }}';"
@@ -171,7 +195,7 @@
           </svg>
           <span>{{ $store->city }}</span>
         </div>
-      </div>
+      </a>
       @endforeach
     </div>
   </section>

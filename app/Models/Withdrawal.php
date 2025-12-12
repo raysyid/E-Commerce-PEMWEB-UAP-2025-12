@@ -17,4 +17,14 @@ class Withdrawal extends Model
         'bank_name',
         'status',
     ];
+
+    public function storeBalance()
+    {
+        return $this->belongsTo(StoreBalance::class);
+    }
+
+    public function store()
+    {
+        return $this->hasOneThrough(Store::class, StoreBalance::class, 'id', 'id', 'store_balance_id', 'store_id');
+    }
 }

@@ -62,4 +62,19 @@ class StoreController extends Controller
         return redirect()->route('seller.dashboard')
             ->with('success', 'Toko berhasil dibuat, selamat berjualan!');
     }
+
+    public function show($id)
+    {
+        $store = Store::where('id', $id)
+            ->where('is_verified', true)
+            ->firstOrFail();
+
+        $products = $store->products()
+            ->where('stock', '>', 0)
+            ->with('productImages')
+            ->latest()
+            ->paginate(12);
+
+        return view('store.show', compact('store', 'products'));
+    }
 }
