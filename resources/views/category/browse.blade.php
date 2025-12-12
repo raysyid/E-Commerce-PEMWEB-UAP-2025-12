@@ -24,7 +24,12 @@
                                   ?? $product->productImages->first();
                     @endphp
                     @if($thumbnail)
-                        <img src="{{ asset('storage/products/' . $thumbnail->image) }}" 
+                        @php
+                            $imagePath = str_starts_with($thumbnail->image, 'seed-')
+                                ? asset('assets/products-seed/' . str_replace('seed-', '', $thumbnail->image))
+                                : asset('storage/products/' . $thumbnail->image);
+                        @endphp
+                        <img src="{{ $imagePath }}" 
                              alt="{{ $product->name }}"
                              class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                     @else

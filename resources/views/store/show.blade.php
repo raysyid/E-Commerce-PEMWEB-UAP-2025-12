@@ -33,7 +33,12 @@
       <div class="flex items-start gap-8">
         {{-- Logo --}}
         <div class="flex-shrink-0">
-          <img src="{{ asset('storage/store/' . $store->logo) }}"
+          @php
+            $logoPath = str_starts_with($store->logo, 'seed-')
+              ? asset('assets/store/' . str_replace('seed-', '', $store->logo))
+              : asset('storage/store/' . $store->logo);
+          @endphp
+          <img src="{{ $logoPath }}"
             onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed={{ $store->name }}';"
             class="w-32 h-32 rounded-full object-cover border-4 border-gray-100 shadow-lg">
         </div>
@@ -82,7 +87,14 @@
       <a href="{{ route('product.detail', $product->slug) }}" class="product-card group bg-white border border-gray-200 rounded-lg overflow-hidden">
         {{-- Image --}}
         <div class="aspect-square w-full overflow-hidden bg-gray-100">
-          <img src="{{ $image ? asset('storage/products/' . $image->image) : 'https://via.placeholder.com/300' }}"
+          @php
+            $imagePath = $image 
+              ? (str_starts_with($image->image, 'seed-') 
+                  ? asset('assets/products-seed/' . str_replace('seed-', '', $image->image))
+                  : asset('storage/products/' . $image->image))
+              : 'https://via.placeholder.com/300';
+          @endphp
+          <img src="{{ $imagePath }}"
             class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
         </div>
 

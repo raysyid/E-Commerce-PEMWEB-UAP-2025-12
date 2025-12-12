@@ -18,13 +18,15 @@
         <div class="lg:w-1/2">
             @php
                 $thumbnail = $product->productImages->firstWhere('is_thumbnail', 1);
+                $imagePath = $thumbnail
+                    ? (str_starts_with($thumbnail->image, 'seed-')
+                        ? asset('assets/products-seed/' . str_replace('seed-', '', $thumbnail->image))
+                        : asset('storage/products/' . $thumbnail->image))
+                    : 'https://via.placeholder.com/600';
             @endphp
 
             <div class="aspect-square w-full max-w-md mx-auto overflow-hidden rounded-lg bg-gray-100">
-                <img src="{{ $thumbnail 
-                        ? asset('storage/products/' . $thumbnail->image)
-                        : 'https://via.placeholder.com/600'
-                    }}"
+                <img src="{{ $imagePath }}"
                     class="w-full h-full object-cover object-center">
             </div>
         </div>

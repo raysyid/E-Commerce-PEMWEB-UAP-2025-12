@@ -22,7 +22,7 @@ class ProductSeeder extends Seeder
                 'price' => 500000,
                 'weight' => 600,
                 'stock' => 1,
-                'images' => ['handbag.webp']
+                'images' => ['handbag1.webp']
             ],
             [
                 'name' => 'Dress Trusty Chiffon lake Smoke',
@@ -31,7 +31,7 @@ class ProductSeeder extends Seeder
                 'price' => 75000,
                 'weight' => 300,
                 'stock' => 1,
-                'images' => ['cifon.webp']
+                'images' => ['cifon1.webp']
             ],
             [
                 'name' => 'Closshi White Stretch Shirt • Coquette Kawaii Y2K Harajuku T',
@@ -40,7 +40,7 @@ class ProductSeeder extends Seeder
                 'price' => 39000,
                 'weight' => 200,
                 'stock' => 1,
-                'images' => ['closshi1.jpg']
+                'images' => ['closshi1.webp']
             ],
             [
                 'name' => 'Lace Midi Dress • KIYOKO TAKASE • Coquette Mori Girl Lolita',
@@ -49,7 +49,7 @@ class ProductSeeder extends Seeder
                 'price' => 135000,
                 'weight' => 200,
                 'stock' => 1,
-                'images' => ['lace_midi.jpg']
+                'images' => ['lace_midi1.webp']
             ],
             [
                 'name' => 'Handbag Roosy x Hello Kitty',
@@ -58,7 +58,7 @@ class ProductSeeder extends Seeder
                 'price' => 340000,
                 'weight' => 200,
                 'stock' => 1,
-                'images' => ['roosy_kitty.jpg']
+                'images' => ['roosy_kitty1.webp']
             ],
             [
                 'name' => 'GAP Hoodie',
@@ -67,7 +67,7 @@ class ProductSeeder extends Seeder
                 'price' => 96000,
                 'weight' => 250,
                 'stock' => 1,
-                'images' => ['gap_hoodie_1.jpg']
+                'images' => ['gap_hoodie1.webp']
             ],
             [
                 'name' => 'Cream/White Knit Sweater',
@@ -76,7 +76,7 @@ class ProductSeeder extends Seeder
                 'price' => 160000,
                 'weight' => 300,
                 'stock' => 1,
-                'images' => ['sweater1.jpg']
+                'images' => ['sweater1.webp']
             ],
             [
                 'name' => 'Nike P6000',
@@ -85,7 +85,7 @@ class ProductSeeder extends Seeder
                 'price' => 850000,
                 'weight' => 335,
                 'stock' => 1,
-                'images' => ['nike_p6000.jpg']
+                'images' => ['nike_p6000_1.webp']
             ],
             [
                 'name' => 'Chanel ransel gabrielle autentik',
@@ -94,7 +94,7 @@ class ProductSeeder extends Seeder
                 'price' => 550000,
                 'weight' => 500,
                 'stock' => 1,
-                'images' => ['chanel_gabrielle.jpg']
+                'images' => ['chanel_gabrielle1.webp']
             ],
             [
                 'name' => 'y2k opemine tank top hoodie',
@@ -103,7 +103,7 @@ class ProductSeeder extends Seeder
                 'price' => 95000,
                 'weight' => 200,
                 'stock' => 1,
-                'images' => ['y2k_hoodie.jpg']
+                'images' => ['y2k_hoodie1.webp']
             ],
         ];
 
@@ -128,11 +128,11 @@ class ProductSeeder extends Seeder
                 'stock' => $p['stock'],
             ]);
 
-            // SIMPAN GAMBAR
+            // SIMPAN GAMBAR dengan prefix 'seed-' untuk membedakan dari user upload
             foreach ($p['images'] as $index => $img) {
                 ProductImage::create([
                     'product_id' => $product->id,
-                    'image' => $img,
+                    'image' => 'seed-' . $img, // Prefix untuk gambar seeder
                     'is_thumbnail' => $index === 0 ? 1 : 0
                 ]);
             }

@@ -12,7 +12,7 @@ class StoreSeeder extends Seeder
         Store::create([
             'user_id' => 2,
             'name' => 'kittylona',
-            'logo' => 'default.png',
+            'logo' => 'seed-lona.webp', // Prefix untuk logo seeder
             'about' => 'Thrift curated | Coquette, Y2K, Morikei, Gothic, Grunge, Fairy & Kawaii',
             'phone' => '08123456789',
             'address_id' => 'ADDR01',
