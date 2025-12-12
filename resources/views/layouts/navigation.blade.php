@@ -13,19 +13,61 @@
 
         {{-- Search Bar --}}
         <div class="flex-1 mx-8">
-            <form action="/" method="GET" class="relative max-w-xl mx-auto">
+            <form action="/" method="GET" class="relative max-w-xl mx-auto group">
                 <input type="text" 
                        name="search" 
-                       placeholder="Cari pakaian vintage..." 
+                       id="searchInput"
+                       placeholder="Cari kemeja..." 
                        value="{{ request('search') }}"
-                       class="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-gray-400 transition">
-                <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                       class="w-full px-4 pr-12 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-black focus:bg-white transition-all duration-200 placeholder:text-gray-400">
+                <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
                 </button>
             </form>
         </div>
+
+        {{-- Animated Placeholder Script --}}
+        <script>
+            const searchInput = document.getElementById('searchInput');
+            const placeholders = [
+                'Cari kemeja...',
+                'Cari dress...',
+                'Cari kaos...',
+                'Cari jeans...',
+                'Cari jaket...',
+                'Cari celana...'
+            ];
+            let currentIndex = 0;
+
+            function changePlaceholder() {
+                if (searchInput && !searchInput.value && document.activeElement !== searchInput) {
+                    // Fade out placeholder
+                    searchInput.classList.add('placeholder-fade');
+                    
+                    setTimeout(() => {
+                        currentIndex = (currentIndex + 1) % placeholders.length;
+                        searchInput.placeholder = placeholders[currentIndex];
+                        
+                        // Fade in placeholder
+                        searchInput.classList.remove('placeholder-fade');
+                    }, 300);
+                }
+            }
+
+            setInterval(changePlaceholder, 3000);
+        </script>
+
+        <style>
+            #searchInput::placeholder {
+                transition: opacity 0.3s ease;
+                opacity: 1;
+            }
+            #searchInput.placeholder-fade::placeholder {
+                opacity: 0;
+            }
+        </style>
 
         {{-- Auth --}}
         <div class="hidden sm:flex items-center gap-6 text-sm font-semibold flex-shrink-0">

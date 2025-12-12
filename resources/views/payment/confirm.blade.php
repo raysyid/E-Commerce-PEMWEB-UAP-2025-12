@@ -19,9 +19,9 @@
 
         {{-- Action Buttons --}}
         <div class="space-y-3">
-            <a href="{{ route('wallet.index') }}" 
+            <a href="{{ route('home') }}" 
                class="block w-full text-center bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold py-3 rounded-xl hover:from-blue-700 hover:to-blue-900 transition shadow-lg">
-                Kembali ke Dompet
+                Kembali ke Beranda
             </a>
             
             {{-- Link riwayat berbeda tergantung jenis transaksi --}}
