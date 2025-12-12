@@ -64,6 +64,8 @@ class SellerWithdrawalController extends Controller
             'store_balance_id' => $balance->id,
             'type' => 'withdraw',
             'amount' => $request->amount,
+            'reference_id' => 'WD-' . time(),
+            'reference_type' => 'withdrawal',
             'remarks' => 'Penarikan dana ke ' . $request->bank . ' - ' . $request->account_number,
         ]);
 

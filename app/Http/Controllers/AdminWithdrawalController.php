@@ -34,30 +34,31 @@ class AdminWithdrawalController extends Controller
     }
 
     public function reject($id)
-    {
-        $withdrawal = Withdrawal::findOrFail($id);
+{
+    $withdrawal = Withdrawal::findOrFail($id);
 
-        if ($withdrawal->status !== 'pending') {
-            return back()->with('error', 'Withdrawal sudah diproses sebelumnya.');
-        }
-
-        // Kembalikan saldo ke seller
-        $balance = StoreBalance::where('store_id', $withdrawal->store_id)->first();
-        $balance->balance += $withdrawal->amount;
-        $balance->save();
-
-        // Catat history pengembalian
-        StoreBalanceHistory::create([
-            'store_id' => $withdrawal->store_id,
-            'type' => 'income',
-            'amount' => $withdrawal->amount,
-            'description' => 'Pengembalian withdrawal yang ditolak',
-        ]);
-
-        // Update status jadi rejected
-        $withdrawal->status = 'rejected';
-        $withdrawal->save();
-
-        return back()->with('success', 'Withdrawal ditolak dan saldo dikembalikan ke seller.');
+    if ($withdrawal->status !== 'pending') {
+        return back()->with('error', 'Withdrawal sudah diproses sebelumnya.');
     }
+
+    // Kembalikan saldo ke seller
+    $balance = StoreBalance::find($withdrawal->store_balance_id);
+    $balance->increment('balance', $withdrawal->amount);
+
+    // Catat history pengembalian
+    StoreBalanceHistory::create([
+        'store_balance_id' => $withdrawal->store_balance_id,
+        'type' => 'income',
+        'amount' => $withdrawal->amount,
+        'reference_id' => 'WD-REFUND-' . time(),
+        'reference_type' => 'withdrawal_refund',
+        'remarks' => 'Pengembalian withdrawal yang ditolak',
+    ]);
+
+    // Update status jadi rejected
+    $withdrawal->status = 'rejected';
+    $withdrawal->save();
+
+    return back()->with('success', 'Withdrawal ditolak dan saldo dikembalikan ke seller.');
+}
 }
