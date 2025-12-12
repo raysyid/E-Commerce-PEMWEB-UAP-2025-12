@@ -10,48 +10,28 @@
     body {
       font-family: 'Inter', sans-serif;
     }
-<<<<<<< Updated upstream
    
-=======
-    
->>>>>>> Stashed changes
     /* Hero overlay gradient */
     .hero-gradient {
       background: linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.2) 100%);
     }
-<<<<<<< Updated upstream
    
-=======
-    
->>>>>>> Stashed changes
     /* Product card hover */
     .product-card {
       transition: all 0.3s ease;
     }
-<<<<<<< Updated upstream
    
-=======
-    
->>>>>>> Stashed changes
     .product-card:hover {
       transform: translateY(-4px);
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     }
-<<<<<<< Updated upstream
    
-=======
-    
->>>>>>> Stashed changes
     /* Store card accent */
     .store-card {
       position: relative;
       transition: all 0.3s ease;
     }
-<<<<<<< Updated upstream
    
-=======
-    
->>>>>>> Stashed changes
     .store-card::before {
       content: '';
       position: absolute;
@@ -63,26 +43,17 @@
       opacity: 0;
       transition: opacity 0.3s ease;
     }
-<<<<<<< Updated upstream
    
     .store-card:hover::before {
       opacity: 1;
     }
    
-=======
-    
-    .store-card:hover::before {
-      opacity: 1;
-    }
-    
->>>>>>> Stashed changes
     .store-card:hover {
       transform: translateY(-4px);
       box-shadow: 0 10px 30px rgba(0,0,0,0.08);
     }
   </style>
 </head>
-<<<<<<< Updated upstream
 
 <body class="bg-gray-50 text-gray-900">
 
@@ -126,160 +97,6 @@
     </div>
   </section>
 
-=======
-<body class="bg-gray-50 text-gray-900">
-  {{-- NAVBAR --}}
-  <nav class="w-full flex items-center justify-between px-12 py-4 border-b bg-white shadow-sm relative">
-    <a href="/" class="relative flex items-center">
-        <div class="h-10 flex items-center"> 
-            <img src="{{ asset('assets/logo/thriftsy.png') }}" 
-                 class="h-20 w-auto object-contain -ml-2">
-        </div>
-    </a>
-    {{-- Search --}}
-    <div class="hidden md:flex w-1/3">
-      <input type="text" placeholder="Cari pakaian vintage..."
-        class="w-full border rounded-xl px-4 py-2 outline-none shadow-sm text-sm focus:ring-2 focus:ring-gray-300 transition">
-    </div>
-    {{-- Auth --}}
-    <div class="flex items-center gap-6 text-sm font-semibold">
-
-      @guest
-      <a href="{{ route('login') }}" class="flex items-center gap-2 hover:text-black transition">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
-        </svg>
-        Login
-      </a>
-      <a href="{{ route('register') }}"
-        class="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-        </svg>
-        Daftar
-      </a>
-      @else
-
-      {{-- MEMBER ONLY WALLET --}}
-      @if(auth()->user()->role === 'member')
-      <a href="{{ route('wallet.index') }}"
-        class="flex items-center gap-2 px-3 py-2 rounded-xl bg-blue-500 text-white hover:bg-blue-600 transition shadow-sm">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M20 7h-2V5a1 1 0 0 0-1-1H5a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h14a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1zm-4-2v2H5a1 1 0 0 1 0-2h11zm3 14H5a1 1 0 0 1-1-1V8h15v11z" />
-          <circle cx="15" cy="13" r="2" />
-        </svg>
-        <span class="text-xs font-medium">Wallet</span>
-      </a>
-      @endif
-
-      {{-- SELLER ONLY --}}
-      @if(auth()->user()->role === 'seller' && auth()->user()->store)
-      <a href="{{ route('seller.dashboard') }}"
-        class="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition shadow-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-        </svg>
-        Toko Saya
-      </a>
-      @endif
-
-      {{-- ADMIN --}}
-      @if(auth()->user()->role === 'admin')
-      <a href="{{ route('admin.dashboard') }}"
-        class="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition shadow-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-        </svg>
-        Admin Panel
-      </a>
-      @endif
-
-      {{-- DROPDOWN --}}
-      <div class="group inline-block relative">
-        <button class="flex items-center gap-1 text-gray-800 hover:text-black transition">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-          </svg>
-          {{ auth()->user()->name }}
-          <span class="text-xs">▼</span>
-        </button>
-
-        <div
-          class="absolute right-0 mt-2 w-36 bg-white border rounded-xl shadow-md opacity-0 invisible
-                      group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50">
-          <a href="{{ route('profile.edit') }}"
-            class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 text-gray-700 transition">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            Profil
-          </a>
-
-          <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit"
-              class="w-full flex items-center gap-2 text-left px-4 py-2 text-red-500 hover:bg-gray-100 transition">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-              </svg>
-              Logout
-            </button>
-          </form>
-        </div>
-      </div>
-
-      @endguest
-    </div>
-  </nav>
-  {{-- KATEGORI --}}
-  <div class="bg-white border-b border-gray-200">
-    <div class="px-10 py-4 flex gap-6">
-      <a href="#" class="text-sm font-semibold text-gray-900 hover:text-black transition pb-1 border-b-2 border-black">
-        Pria
-      </a>
-      <a href="#" class="text-sm font-semibold text-gray-600 hover:text-black transition pb-1 border-b-2 border-transparent hover:border-gray-300">
-        Wanita
-      </a>
-    </div>
-  </div>
-  {{-- HERO --}}
-  <section class="relative h-[500px] overflow-hidden">
-    <img src="{{ asset('assets/foto/fotoLanding.jpeg') }}" 
-         class="absolute inset-0 w-full h-full object-cover"
-         alt="Vintage Fashion">
-    
-    <!-- Gradient Overlay -->
-    <div class="absolute inset-0 hero-gradient"></div>
-    
-    <!-- Content -->
-    <div class="relative h-full flex items-center px-10 md:px-20">
-      <div class="max-w-2xl text-white">
-        <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6">
-          Jual-Beli<br>
-          baju preloved<br>
-          dan thrift
-        </h1>
-        
-        <div class="flex gap-4 mt-8">
-          @guest
-          <a href="{{ route('login') }}"
-            class="px-8 py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-100 transition">
-            Mulai berjualan
-          </a>
-          @else
-            @if(auth()->user()->role === 'member')
-            <a href="/store/register"
-              class="px-8 py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-100 transition">
-              Mulai berjualan
-            </a>
-            @endif
-          @endguest
-        </div>
-      </div>
-    </div>
-  </section>
->>>>>>> Stashed changes
   {{-- NEW ITEMS --}}
   <section class="px-10 py-16 bg-white">
     <div class="flex items-center justify-between mb-8">
@@ -291,28 +108,22 @@
         </svg>
       </a>
     </div>
-<<<<<<< Updated upstream
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
-=======
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-5">
->>>>>>> Stashed changes
       @foreach ($products as $product)
       @php
       $image = $product->productImages->where('is_thumbnail', 1)->first()
       ?? $product->productImages->first()
       ?? null;
       @endphp
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
       <a href="{{ route('product.detail', $product->slug) }}" class="product-card group bg-white border border-gray-200 rounded-lg overflow-hidden">
         {{-- Image --}}
         <div class="aspect-square w-full overflow-hidden bg-gray-100">
           <img src="{{ $image ? asset('storage/products/' . $image->image) : 'https://via.placeholder.com/300' }}"
             class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
         </div>
+
         {{-- Name + Price --}}
         <div class="p-3">
           <h4 class="font-medium text-sm line-clamp-2 text-gray-900 mb-1">
@@ -326,6 +137,7 @@
       @endforeach
     </div>
   </section>
+
   {{-- REKOMENDASI TOKO --}}
   <section class="px-10 py-16 bg-gray-50">
     <div class="flex items-center justify-between mb-8">
@@ -337,10 +149,7 @@
         </svg>
       </a>
     </div>
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
       @foreach ($stores as $store)
       <div class="store-card bg-white rounded-xl p-6 text-center">
@@ -349,7 +158,6 @@
             onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed={{ $store->name }}';"
             class="w-20 h-20 rounded-full object-cover border-2 border-gray-100">
         </div>
-<<<<<<< Updated upstream
 
         <h4 class="font-bold text-lg capitalize mb-2">{{ $store->name }}</h4>
         
@@ -357,12 +165,6 @@
           {{ $store->about }}
         </p>
 
-=======
-        <h4 class="font-bold text-lg capitalize mb-2">{{ $store->name }}</h4>
-        <p class="text-sm text-gray-600 line-clamp-3 leading-relaxed mb-3">
-          {{ $store->about }}
-        </p>
->>>>>>> Stashed changes
         <div class="inline-flex items-center gap-1 text-xs text-gray-500 bg-gray-50 px-3 py-1.5 rounded-full">
           <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
@@ -373,6 +175,7 @@
       @endforeach
     </div>
   </section>
+
   {{-- FOOTER --}}
   <footer class="bg-[#f5f3ee] text-black py-12 px-6 md:px-20 mt-16 border-t">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -382,6 +185,7 @@
           <li><a href="#" class="hover:text-black transition">Tentang Kami</a></li>
         </ul>
       </div>
+
       <div>
         <h3 class="font-bold text-lg mb-4">Discover</h3>
         <ul class="space-y-2 text-sm text-gray-700">
@@ -390,6 +194,7 @@
           <li><a href="#" class="hover:text-black transition">Belanja</a></li>
         </ul>
       </div>
+
       <div>
         <h3 class="font-bold text-lg mb-4">Help</h3>
         <ul class="space-y-2 text-sm text-gray-700">
@@ -397,6 +202,7 @@
         </ul>
       </div>
     </div>
+
     <div class="flex items-center gap-4 mt-14 mb-6">
       <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 hover:bg-black hover:text-white transition">
         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -424,10 +230,12 @@
         </svg>
       </a>
     </div>
+
     <div class="flex gap-10 text-sm text-gray-700">
       <a href="#" class="hover:text-black transition">Privacy Policy</a>
       <a href="#" class="hover:text-black transition">Terms & Conditions</a>
     </div>
   </footer>
+
 </body>
 </html>
