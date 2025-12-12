@@ -1,6 +1,6 @@
-<x-app-layout>
+<x-app-layout title="Seller Dashboard - Thriftsy">
 
-    <div class="max-w-7xl mx-auto py-10 px-6">
+    <div class="max-w-6xl mx-auto py-10 px-6">
 
         {{-- HEADER GREETING --}}
         <div class="mb-10">

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Thriftsy</title>
+  <link rel="icon" type="image/png" href="{{ asset('assets/logo/thriftsy.png') }}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   @vite('resources/css/app.css')
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -107,7 +108,7 @@
         </div>
       @else
         <h3 class="text-3xl font-bold">Newest Items</h3>
-        <a href="#" class="text-sm font-semibold hover:underline flex items-center gap-1">
+        <a href="{{ route('products.newest') }}" class="text-sm font-semibold hover:underline flex items-center gap-1">
           Lihat semua
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -173,7 +174,7 @@
   <section class="px-10 py-16 bg-gray-50">
     <div class="flex items-center justify-between mb-8">
       <h3 class="text-3xl font-bold">Rekomendasi Toko</h3>
-      <a href="#" class="text-sm font-semibold hover:underline flex items-center gap-1">
+      <a href="{{ route('stores.recommended') }}" class="text-sm font-semibold hover:underline flex items-center gap-1">
         Lihat semua
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>

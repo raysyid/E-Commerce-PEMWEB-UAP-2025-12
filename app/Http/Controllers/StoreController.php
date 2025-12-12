@@ -77,4 +77,16 @@ class StoreController extends Controller
 
         return view('store.show', compact('store', 'products'));
     }
+
+    // Recommended Stores
+    public function recommended()
+    {
+        $stores = Store::where('is_verified', true)
+            ->withCount('products')
+            ->orderBy('products_count', 'desc')
+            ->take(16)
+            ->get();
+
+        return view('store.recommended', compact('stores'));
+    }
 }

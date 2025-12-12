@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ $product->name }} - Thriftsy</title>
+    <link rel="icon" type="image/png" href="{{ asset('assets/logo/thriftsy.png') }}">
     @vite('resources/css/app.css')
 </head>
 

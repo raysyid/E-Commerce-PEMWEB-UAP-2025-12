@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout title="Admin Dashboard - Thriftsy">
     <div class="max-w-6xl mx-auto py-10 px-6 pb-20">
 
         {{-- HEADER --}}

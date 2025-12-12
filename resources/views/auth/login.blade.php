@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-guest-layout title="Login - Thriftsy">
     <div class="min-h-screen w-full flex items-center justify-center bg-gray-100">
 
         <div class="w-full max-w-[1000px] bg-white shadow-xl rounded-2xl grid grid-cols-1 md:grid-cols-2 overflow-hidden min-h-[550px]">

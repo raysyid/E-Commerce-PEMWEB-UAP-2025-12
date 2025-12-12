@@ -18,7 +18,17 @@ class ProductController extends Controller
     public function show($slug)
     {
         $product = Product::with('store', 'productCategory')->where('slug', $slug)->firstOrFail();
-        return view('products.show', compact('product'));
+        
+        // Get other products from the same store (exclude current product)
+        $relatedProducts = Product::with('productImages')
+            ->where('store_id', $product->store_id)
+            ->where('id', '!=', $product->id)
+            ->where('stock', '>', 0)
+            ->inRandomOrder()
+            ->limit(5)
+            ->get();
+        
+        return view('products.show', compact('product', 'relatedProducts'));
     }
 
     // Browse by Category
@@ -33,5 +43,17 @@ class ProductController extends Controller
             ->paginate(12);
 
         return view('category.browse', compact('category', 'products'));
+    }
+
+    // Newest Products
+    public function newest()
+    {
+        $products = Product::with(['productCategory', 'store', 'productImages'])
+            ->where('stock', '>', 0)
+            ->latest()
+            ->take(16)
+            ->get();
+
+        return view('products.newest', compact('products'));
     }
 }

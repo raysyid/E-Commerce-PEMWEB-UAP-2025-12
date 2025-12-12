@@ -50,6 +50,8 @@ Route::get('/dashboard', function () {
 */
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.detail');
 Route::get('/category/{slug}', [ProductController::class, 'category'])->name('category.browse');
+Route::get('/products/newest', [ProductController::class, 'newest'])->name('products.newest');
+Route::get('/stores/recommended', [StoreController::class, 'recommended'])->name('stores.recommended');
 
 /*
 |--------------------------------------------------------------------------

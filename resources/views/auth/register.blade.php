@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-guest-layout title="Register - Thriftsy">
 
     <!-- FULLSCREEN CONTAINER -->
     <div class="min-h-screen w-full flex items-center justify-center bg-gray-100">
