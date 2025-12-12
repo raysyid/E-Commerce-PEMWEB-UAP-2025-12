@@ -149,8 +149,8 @@ Setelah menjalankan seeder, Anda dapat login dengan akun berikut:
 
 ## 🎨 Fitur Unggulan
 
-### 1. Multi-Image Product
-Setiap produk dapat memiliki multiple images dengan satu thumbnail utama.
+### 1. Search & Filter
+Pencarian produk dengan filter kategori dan toko.
 
 ### 2. Wallet System
 Sistem wallet terintegrasi untuk top-up, pembayaran, dan withdrawal.
@@ -163,9 +163,6 @@ Buyer dapat melacak pesanan dengan nomor resi yang diinput seller.
 
 ### 5. Responsive Design
 UI yang responsive dan mobile-friendly dengan Tailwind CSS.
-
-### 6. Search & Filter
-Pencarian produk dengan filter kategori dan toko.
 
 ## 📱 Screenshots
 
