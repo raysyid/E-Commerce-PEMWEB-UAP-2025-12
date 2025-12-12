@@ -12,8 +12,8 @@
         </a>
 
         {{-- Search Bar --}}
-        <div class="flex-1 max-w-xl mx-8">
-            <form action="/" method="GET" class="relative">
+        <div class="flex-1 mx-8">
+            <form action="/" method="GET" class="relative max-w-xl mx-auto">
                 <input type="text" 
                        name="search" 
                        placeholder="Cari pakaian vintage..." 
@@ -28,7 +28,7 @@
         </div>
 
         {{-- Auth --}}
-        <div class="hidden sm:flex items-center gap-6 text-sm font-semibold">
+        <div class="hidden sm:flex items-center gap-6 text-sm font-semibold flex-shrink-0">
 
             @guest
                 <a href="{{ route('login') }}" class="flex items-center gap-2 hover:text-black transition">
@@ -50,12 +50,12 @@
                 {{-- MEMBER ONLY WALLET --}}
                 @if(auth()->user()->role === 'member')
                 <a href="{{ route('wallet.index') }}"
-                    class="flex items-center gap-2 px-3 py-2 rounded-xl bg-blue-500 text-white hover:bg-blue-600 transition shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    class="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M20 7h-2V5a1 1 0 0 0-1-1H5a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h14a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1zm-4-2v2H5a1 1 0 0 1 0-2h11zm3 14H5a1 1 0 0 1-1-1V8h15v11z" />
                         <circle cx="15" cy="13" r="2" />
                     </svg>
-                    <span class="text-xs font-medium">Wallet</span>
+                    Wallet
                 </a>
                 @endif
 

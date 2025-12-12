@@ -20,11 +20,13 @@
                 $thumbnail = $product->productImages->firstWhere('is_thumbnail', 1);
             @endphp
 
-            <img src="{{ $thumbnail 
-                    ? asset('storage/products/' . $thumbnail->image)
-                    : 'https://via.placeholder.com/600'
-                }}"
-                class="rounded-lg w-full max-w-md object-cover">
+            <div class="aspect-square w-full max-w-md mx-auto overflow-hidden rounded-lg bg-gray-100">
+                <img src="{{ $thumbnail 
+                        ? asset('storage/products/' . $thumbnail->image)
+                        : 'https://via.placeholder.com/600'
+                    }}"
+                    class="w-full h-full object-cover object-center">
+            </div>
         </div>
 
         {{-- RIGHT INFO --}}
