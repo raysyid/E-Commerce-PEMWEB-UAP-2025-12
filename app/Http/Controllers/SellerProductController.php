@@ -16,6 +16,7 @@ class SellerProductController extends Controller
     {
         $products = Product::where('store_id', Auth::user()->store->id)
             ->with('productCategory', 'productImages')
+            ->orderByRaw('CASE WHEN stock > 0 THEN 0 ELSE 1 END') // In-stock first
             ->latest()
             ->get();
 

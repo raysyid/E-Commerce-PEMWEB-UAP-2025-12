@@ -49,6 +49,7 @@ Route::get('/dashboard', function () {
 |--------------------------------------------------------------------------
 */
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.detail');
+Route::get('/category/{slug}', [ProductController::class, 'category'])->name('category.browse');
 
 Route::middleware('auth')->group(function () {
 
@@ -96,30 +97,36 @@ Route::middleware(['auth', 'isMember'])->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| SELLER AREA
+| SELLER ROUTES
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'isSeller'])
-    ->prefix('seller')
-    ->name('seller.')
-    ->group(function () {
-
-        Route::get('/profile', [SellerProfileController::class, 'index'])->name('profile');
-        Route::post('/profile', [SellerProfileController::class, 'update'])->name('profile.update');
-
-        Route::get('/pending', fn() => view('seller.pending'))->name('pending');
-
-        Route::middleware('storeVerified')->group(function () {
-
-            Route::get('/dashboard', [SellerDashboardController::class, 'index'])->name('dashboard');
-            Route::resource('categories', SellerCategoryController::class)->except(['show']);
-            Route::resource('products', SellerProductController::class);
-            Route::get('/orders', [SellerOrderController::class, 'index'])->name('orders');
-            Route::patch('/orders/{id}', [SellerOrderController::class, 'update'])->name('orders.update');
-            Route::get('/balance', [SellerBalanceController::class, 'index'])->name('balance');
-            Route::resource('withdrawals', SellerWithdrawalController::class)->only(['index', 'store']);
-        });
+Route::middleware(['auth', 'isSeller'])->prefix('seller')->name('seller.')->group(function () {
+    
+    // Profile & Pending
+    Route::get('profile', [SellerProfileController::class, 'index'])->name('profile');
+    Route::post('profile', [SellerProfileController::class, 'update'])->name('profile.update');
+    Route::get('pending', fn() => view('seller.pending'))->name('pending');
+    
+    // Dashboard (requires verified store)
+    Route::middleware('storeVerified')->group(function () {
+        Route::get('/', [SellerDashboardController::class, 'index'])->name('dashboard');
+        
+        // Products
+        Route::resource('products', SellerProductController::class);
+        Route::delete('products/{id}/image/{imageId}', [SellerProductController::class, 'deleteImage'])->name('products.deleteImage');
+        
+        // Orders
+        Route::get('orders', [SellerOrderController::class, 'index'])->name('orders.index');
+        Route::patch('orders/{id}', [SellerOrderController::class, 'update'])->name('orders.update');
+        
+        // Categories (Read-only)
+        Route::get('categories', [SellerCategoryController::class, 'index'])->name('categories.index');
+        
+        // Balance & Withdrawal
+        Route::get('balance', [SellerBalanceController::class, 'index'])->name('balance.index');
+        Route::resource('withdrawals', SellerWithdrawalController::class)->only(['index', 'store']);
     });
+});
 
 
 /*
@@ -168,6 +175,14 @@ Route::middleware(['auth', 'isAdmin'])
 
         Route::delete('/users/store/{id}', [\App\Http\Controllers\AdminUserController::class, 'deleteStore'])
             ->name('store.delete');
+        
+        // Withdrawals
+        Route::get('/withdrawals', [\App\Http\Controllers\AdminWithdrawalController::class, 'index'])
+            ->name('withdrawals.index');
+        Route::patch('/withdrawals/{id}/approve', [\App\Http\Controllers\AdminWithdrawalController::class, 'approve'])
+            ->name('withdrawals.approve');
+        Route::patch('/withdrawals/{id}/reject', [\App\Http\Controllers\AdminWithdrawalController::class, 'reject'])
+            ->name('withdrawals.reject');
     });
 
 

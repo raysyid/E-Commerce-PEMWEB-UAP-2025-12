@@ -67,13 +67,13 @@
                 <span class="font-medium text-gray-800">Daftar Produk</span>
             </a>
 
-            <a href="{{ route('seller.orders') }}"
+            <a href="{{ route('seller.orders.index') }}"
                 class="p-5 bg-white border rounded-2xl shadow-sm hover:shadow-lg hover:bg-gray-50 transition text-center flex flex-col items-center gap-2">
                 <span class="text-3xl">🧾</span>
                 <span class="font-medium text-gray-800">Daftar Pesanan</span>
             </a>
 
-            <a href="{{ route('seller.balance') }}"
+            <a href="{{ route('seller.balance.index') }}"
                 class="p-5 bg-white border rounded-2xl shadow-sm hover:shadow-lg hover:bg-gray-50 transition text-center flex flex-col items-center gap-2">
                 <span class="text-3xl">💰</span>
                 <span class="font-medium text-gray-800">Saldo Toko</span>

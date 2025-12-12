@@ -11,13 +11,6 @@
     {{-- NAVBAR GLOBAL --}}
     @include('layouts.navigation')
 
-
-    {{-- KATEGORI --}}
-    <div class="px-10 py-3 text-sm text-gray-600 flex gap-6 font-medium">
-        <a href="#" class="hover:text-black">Pria</a>
-        <a href="#" class="hover:text-black">Wanita</a>
-    </div>
-
     {{-- PRODUCT DETAIL --}}
     <div class="max-w-6xl mx-auto p-6 lg:flex lg:gap-12">
 

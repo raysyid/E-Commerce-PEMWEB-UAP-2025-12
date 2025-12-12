@@ -81,7 +81,8 @@ class PaymentController extends Controller
         // ===== Jika transaksi =====
         if ($request->transaction_id) {
 
-            $transaction = Transaction::find($request->transaction_id);
+            // Load transaction dengan details dan products
+            $transaction = Transaction::with('transactionDetails.product')->find($request->transaction_id);
 
             if (!$transaction) {
                 return view('payment.confirm', [
@@ -97,6 +98,15 @@ class PaymentController extends Controller
 
                 $transaction->payment_status = 'paid';
                 $transaction->save();
+
+                // ✅ KURANGI STOK PRODUK
+                foreach ($transaction->transactionDetails as $detail) {
+                    $product = $detail->product;
+                    if ($product) {
+                        $product->stock -= $detail->qty;
+                        $product->save();
+                    }
+                }
 
                 return view('payment.confirm', [
                     'status' => 'Berhasil',
@@ -175,7 +185,8 @@ class PaymentController extends Controller
      */
     public function processWallet($id)
     {
-        $transaction = Transaction::findOrFail($id);
+        // Load transaction dengan details dan products
+        $transaction = Transaction::with('transactionDetails.product')->findOrFail($id);
         
         // Cek saldo user
         $balance = \App\Models\UserBalance::where('user_id', \Auth::id())->first();
@@ -194,6 +205,15 @@ class PaymentController extends Controller
         // Update status transaksi
         $transaction->payment_status = 'paid';
         $transaction->save();
+        
+        // ✅ KURANGI STOK PRODUK
+        foreach ($transaction->transactionDetails as $detail) {
+            $product = $detail->product;
+            if ($product) {
+                $product->stock -= $detail->qty;
+                $product->save();
+            }
+        }
         
         // Redirect ke halaman sukses
         return view('payment.success', [

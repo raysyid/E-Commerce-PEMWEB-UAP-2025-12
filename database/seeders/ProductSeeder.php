@@ -109,9 +109,12 @@ class ProductSeeder extends Seeder
 
         foreach ($products as $p) {
 
-            $category = ProductCategory::firstOrCreate([
-                'name' => $p['category']
-            ]);
+            // Cari kategori yang sudah ada (ga auto-create)
+            $category = ProductCategory::where('name', $p['category'])->first();
+            
+            if (!$category) {
+                throw new \Exception("Kategori '{$p['category']}' tidak ditemukan. Pastikan kategori sudah di-seed terlebih dahulu.");
+            }
 
             $product = Product::create([
                 'store_id' => $storeId,

@@ -27,5 +27,14 @@ class MemberUserSeeder extends Seeder
             'password' => Hash::make('agus'),
             'role' => 'member'
         ]);
+
+        // Member 3
+        User::create([
+            'name' => 'Budi',
+            'email' => 'budi@gmail.com',
+            'phone_number' => '085555555555',
+            'password' => Hash::make('budi'),
+            'role' => 'member'
+        ]);
     }
 }
