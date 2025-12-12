@@ -74,8 +74,8 @@
     <div class="relative h-full flex items-center px-10 md:px-20">
       <div class="max-w-2xl text-white">
         <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6">
-          temukan stylemu<br>
-          baju preloved<br>
+          Pilihan item<br>
+          fashion preloved<br>
           dan thrift
         </h1>
        
