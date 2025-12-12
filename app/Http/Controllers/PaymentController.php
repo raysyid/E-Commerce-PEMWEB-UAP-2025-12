@@ -99,7 +99,7 @@ class PaymentController extends Controller
                 $transaction->payment_status = 'paid';
                 $transaction->save();
 
-                // ✅ KURANGI STOK PRODUK (untuk manual payment/transfer)
+                // Kurangi stok produk
                 foreach ($transaction->transactionDetails as $detail) {
                     $product = $detail->product;
                     if ($product) {
@@ -206,7 +206,7 @@ class PaymentController extends Controller
         $transaction->payment_status = 'paid';
         $transaction->save();
         
-        // ✅ KURANGI STOK PRODUK
+        // Kurangi stok produk
         foreach ($transaction->transactionDetails as $detail) {
             $product = $detail->product;
             if ($product) {

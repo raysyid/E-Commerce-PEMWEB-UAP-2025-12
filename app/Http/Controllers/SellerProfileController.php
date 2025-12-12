@@ -28,7 +28,7 @@ class SellerProfileController extends Controller
 
         $store = Auth::user()->store;
 
-        // 🔥 Extra Security Check (mencegah file disamarkan jadi .jpg padahal bukan gambar)
+        // Validasi MIME type untuk keamanan
         if ($request->hasFile('logo')) {
             if (!in_array($request->logo->getMimeType(), ['image/jpeg', 'image/png', 'image/webp'])) {
                 return back()->with('error', 'Format logo tidak valid.');
@@ -44,15 +44,15 @@ class SellerProfileController extends Controller
             'address' => $request->address,
         ]);
 
-        // 🔥 Jika upload logo baru → hapus lama dan simpan baru
+        // Update logo jika ada file baru
         if ($request->hasFile('logo')) {
 
-            // hapus file lama jika bukan default.png
+            // Hapus file lama
             if ($store->logo && $store->logo !== 'default.png') {
                 Storage::delete('store/' . $store->logo);
             }
 
-            // simpan logo baru
+            // Simpan logo baru
             $newLogo = time() . '.' . $request->logo->extension();
             $request->logo->storeAs('store', $newLogo);
 

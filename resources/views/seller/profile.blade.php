@@ -155,4 +155,17 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Show selected file name
+        document.getElementById('logoInput').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name;
+            const label = document.querySelector('label[for="logoInput"] p.text-sm');
+            if (fileName) {
+                label.textContent = '✓ ' + fileName;
+                label.classList.add('text-green-600');
+                label.classList.remove('text-gray-700');
+            }
+        });
+    </script>
 </x-app-layout>
